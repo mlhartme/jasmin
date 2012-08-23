@@ -5,7 +5,6 @@ import com.oneandone.jasmin.model.Attributes;
 import com.oneandone.jasmin.model.Engine;
 import com.oneandone.jasmin.model.Repository;
 import com.oneandone.jasmin.model.Resolver;
-import com.oneandone.sales.unifiedlogging.ExplicitContext;
 import net.sf.beezle.sushi.fs.Node;
 import net.sf.beezle.sushi.fs.World;
 import net.sf.beezle.sushi.fs.file.FileNode;
@@ -23,8 +22,6 @@ public class Application {
         boolean autoReload;
         String siteId;
         Integer expires;
-        int pathCache;
-        int referenceCache;
         Resolver resolver;
 
         str = getString(config, "project", null);
@@ -71,11 +68,10 @@ public class Application {
 
     private final ServletContext context;
     public final Resolver resolver;
+    public final String name;
 
     /** may be null. */
     public final Node applicationDescriptor;
-
-    public final ExplicitContext loggingContext;
 
     /**
      * Response expires after the number of seconds specified here. Also used for Cache-Control: max-age.
@@ -86,16 +82,16 @@ public class Application {
 
     public static final int MANY_YEARS = 60 * 60 * 24 * 365 * 15;
 
-    public Application(ServletContext context, Resolver resolver, String siteId, Node applicationDescriptor, Integer expires) {
+    public Application(ServletContext context, Resolver resolver, String name, Node applicationDescriptor, Integer expires) {
         this.context = context;
         this.resolver = resolver;
+        this.name = name;
         this.applicationDescriptor = applicationDescriptor;
-        this.loggingContext = new ExplicitContext(siteId, "novisit", "noucuoId");
         this.expires = expires;
     }
 
     public String getName() {
-        return loggingContext.getSiteId();
+        return name;
     }
 
     public Engine createEngineSimple(Node docroot, Node localhost) throws IOException {

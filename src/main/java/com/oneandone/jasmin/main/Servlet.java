@@ -5,9 +5,6 @@ import com.oneandone.jasmin.model.File;
 import com.oneandone.jasmin.model.Module;
 import com.oneandone.jasmin.model.Resolver;
 import com.oneandone.jasmin.model.Source;
-import com.oneandone.sales.applog.LogMessage;
-import com.oneandone.sales.unifiedlogging.ContextVariable;
-import com.oneandone.sales.unifiedlogging.UnifiedLogger;
 import net.sf.beezle.sushi.fs.Node;
 import net.sf.beezle.sushi.fs.World;
 import net.sf.beezle.sushi.fs.file.FileNode;
@@ -196,7 +193,6 @@ public class Servlet extends HttpServlet {
 
         result = -1;
         try {
-            ContextVariable.set(application.loggingContext);
             path = request.getPathInfo();
             if (path != null && path.startsWith("/get/")) {
                 lazyInit(request);
@@ -219,8 +215,6 @@ public class Servlet extends HttpServlet {
         } catch (Throwable e) {
             error(request, "getLastModified", e);
             throw new RuntimeException("unexpected throwable", e);
-        } finally {
-            ContextVariable.reset();
         }
         LOG.debug("getLastModified(" + request.getPathInfo() + ") -> " + result);
         return result;
@@ -229,7 +223,6 @@ public class Servlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         try {
-            ContextVariable.set(application.loggingContext);
             doGetUnchecked(request, response);
         } catch (IOException e) {
             // I can't compile against this class because the servlet api does not officially
@@ -252,8 +245,6 @@ public class Servlet extends HttpServlet {
         } catch (Throwable e) {
             error(request, "get", e);
             throw new RuntimeException("unexpected throwable", e);
-        } finally {
-            ContextVariable.reset();
         }
     }
 
@@ -304,7 +295,6 @@ public class Servlet extends HttpServlet {
         notFound(request, response);
     }
 
-    private static final UnifiedLogger ULOG = new UnifiedLogger("com.oneandone.jasmin");
     private static final long FIVE_MINUTES = 1000L * 60 * 5;
     private static final long SEVEN_DAYS = 1000L * 3600 * 24 * 7;
     private static final long TEN_YEARS = 1000L * 3600 * 24 * 365 * 10;
@@ -361,7 +351,7 @@ public class Servlet extends HttpServlet {
         gzip = canGzip(request);
         bytes = engine.process(path, response, gzip);
         duration = System.currentTimeMillis() - started;
-        ULOG.log(path, bytes, duration, gzip, referer(request));
+        LOG.info(path + "|" + bytes + "|" + duration + "|" + gzip + "|" + referer(request));
     }
 
     private static boolean sameTime(long left, long right) {
@@ -639,7 +629,7 @@ public class Servlet extends HttpServlet {
 
     /** @param request may be null */
     private void error(HttpServletRequest request, String method, Throwable throwable) {
-        LogMessage message;
+        /* TODO: LogMessage message;
         Enumeration<String> names;
         Enumeration<String> values;
         String name;
@@ -661,8 +651,8 @@ public class Servlet extends HttpServlet {
                 }
             }
             // currently unused:  message.setBody()
-        }
-        LOG.error(message, throwable);
+        }*/
+        LOG.error(method + ":" + throwable.getMessage(), throwable);
     }
 
     private static String pathInfo(HttpServletRequest request) {
