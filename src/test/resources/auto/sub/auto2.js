@@ -1,0 +1,1 @@
+/* jasmin depend = jasmin-auto-auto1 */

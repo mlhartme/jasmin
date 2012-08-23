@@ -1,0 +1,2 @@
+/* jasmin */
+variant min
