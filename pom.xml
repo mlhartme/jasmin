@@ -12,7 +12,7 @@
 
   <name>Jasmin</name>
   <description>JavaScript and Css Modules</description>
-  <url>git:https://github.com/mlhartme/jasmin</url>
+  <url>http://mlhartme.github.com/jasmin/</url>
 
   <groupId>net.sf.beezle</groupId>
   <artifactId>jasmin</artifactId>
