@@ -560,8 +560,8 @@ public class Servlet extends HttpServlet {
             dest.value(source.groupId);
             dest.key("version");
             dest.value(source.version);
-            dest.key("svn");
-            dest.value(source.svn);
+            dest.key("scm");
+            dest.value(source.scm);
             dest.endObject();
             dest.endObject();
         } catch (JSONException e) {

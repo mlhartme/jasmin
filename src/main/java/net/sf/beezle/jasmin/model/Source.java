@@ -18,7 +18,7 @@ public class Source {
         String groupId;
         String artifactId;
         String version;
-        String svn;
+        String scm;
 
         properties.checkExists();
         src = properties.createReader();
@@ -28,8 +28,8 @@ public class Source {
         groupId = get(p, "groupId");
         artifactId = get(p, "artifactId");
         version = get(p, "version");
-        svn = Strings.removeLeft(get(p, "scmConnection"), "scm:svn:");
-        return new Source(base, groupId, artifactId, version, svn);
+        scm = get(p, "scmConnection");
+        return new Source(base, groupId, artifactId, version, scm);
     }
 
     private static String get(Properties p, String key) {
@@ -48,13 +48,13 @@ public class Source {
     public final String groupId;
     public final String artifactId;
     public final String version;
-    public final String svn;
+    public final String scm;
 
-    public Source(Node classpathBase, String groupId, String artifactId, String version, String svn) {
+    public Source(Node classpathBase, String groupId, String artifactId, String version, String scm) {
         this.classpathBase = classpathBase;
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.version = version;
-        this.svn = svn;
+        this.scm = scm;
     }
 }
