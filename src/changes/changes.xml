@@ -7,6 +7,9 @@
     müssen noch Änderungen in der depend.xml und der metatags.xml vorgenommen werden
     -->
     <release date="2012-08-xx" version="3.0.0">
+      <action date="2012-08-24" dev="mhm" type="update">
+        Changed groupId and package to net.sf.beezle.
+      </action>
       <action date="2012-08-22" dev="mhm" type="update">
         Update sushi 2.7 to 3.0.
       </action>
