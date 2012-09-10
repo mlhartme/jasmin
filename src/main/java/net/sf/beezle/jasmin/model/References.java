@@ -47,6 +47,7 @@ import java.util.logging.Logger;
 /** Reference to a node, with minimize flag and type. */
 public class References {
     public static final byte LF = 10;
+    public static final int LINE_BREAK = 300;
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(References.class);
 
@@ -66,8 +67,8 @@ public class References {
     public References(MimeType type, boolean overallMinimize) {
         this.type = type;
         this.overallMinimize = overallMinimize;
-        this.minimizes = new ArrayList<Boolean>();
-        this.nodes = new ArrayList<Node>();
+        this.minimizes = new ArrayList<>();
+        this.nodes = new ArrayList<>();
     }
 
     public void add(boolean minimize, Node node) {
@@ -112,7 +113,7 @@ public class References {
                         messages = new ByteArrayOutputStream();
                         try {
                             new JavaScriptCompressor(reader, new ToolErrorReporter(true, new PrintStream(messages))).compress(
-                                    writer, MimeType.LINE_BREAK, false, false, true, true);
+                                    writer, LINE_BREAK, false, false, true, true);
                         } catch (EvaluatorException e) {
                             throw new IOException(srcName + ":" + e.getMessage() + "\n" + messages.toString("utf-8"), e);
                         } catch (IOException e) {

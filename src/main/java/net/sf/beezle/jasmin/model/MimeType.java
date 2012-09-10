@@ -20,8 +20,6 @@ package net.sf.beezle.jasmin.model;
 public enum MimeType {
     JS("text/javascript"), CSS("text/css");
 
-    public static final int LINE_BREAK = 300;
-
     public static MimeType lookup(String path) {
         for (MimeType type : values()) {
             if (type.isInstance(path)) {
