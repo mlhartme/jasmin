@@ -16,6 +16,7 @@
  */
 package net.sf.beezle.jasmin.model;
 
+import net.sf.beezle.jasmin.main.Servlet;
 import net.sf.beezle.sushi.fs.GetLastModifiedException;
 import net.sf.beezle.sushi.graph.CyclicDependency;
 import net.sf.beezle.sushi.io.Buffer;
@@ -47,11 +48,11 @@ public class Engine {
     }
 
     /**
-     * Output is prepared in-memory before the response is writter because
-     * a) that's the commen case where output is cached. If output is to big for this, that whole caching doesn't work
+     * Output is prepared in-memory before the response is written because
+     * a) that's the common case where output is cached. If output is to big for this, that whole caching doesn't work
      * b) I send sent proper error pages
      * c) I can return the number of bytes actually written
-     * @return bytes written
+     * @return bytes written or -1 if building the module content failed.
      */
     public int process(String path, HttpServletResponse response, boolean gzip) throws IOException {
         Content content;
@@ -61,8 +62,8 @@ public class Engine {
         try {
             content = doProcess(path);
         } catch (IOException e) {
-            // TODO: production only?
-            // TODO: warning sender
+            // TODO: development only?
+            Servlet.LOG.error("process failed: " + e.getMessage(), e);
             response.setStatus(500);
             response.setContentType("text/html");
             writer = response.getWriter();
@@ -88,6 +89,7 @@ public class Engine {
         return bytes.length;
     }
 
+    /** Convenience method for testing */
     public String process(String path) throws IOException {
         Content content;
 
@@ -95,7 +97,7 @@ public class Engine {
         return new String(unzip(content.bytes), UTF_8);
     }
 
-    /* @return -1 for when unknown */
+    /* @return -1 (i.e: unknown) when not cached; not computed */
     public long getLastModified(String path) throws GetLastModifiedException {
         String hash;
         Content content;

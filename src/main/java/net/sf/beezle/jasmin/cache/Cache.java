@@ -31,7 +31,7 @@ public abstract class Cache<K, V> {
     private int misses;
 
     public Cache(int maxSize) {
-        this.items = new LinkedHashMap<K, Item<V>>(16, 0.75f, true);
+        this.items = new LinkedHashMap<>(16, 0.75f, true);
         this.maxSize = maxSize;
         this.size = 0;
         this.lookups = 0;

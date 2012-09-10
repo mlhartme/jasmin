@@ -13,7 +13,7 @@
         Update sushi 2.7 to 3.0.
       </action>
       <action date="2012-08-22" dev="mhm" type="add">
-        Added Sass processing for all css files.
+        Added Sass processing for all css files. File extension remains .css - there is no .sass or .ssass extension.
       </action>
       <action date="2012-03-30" dev="mhm" type="add">
         Added "call" comments to replace base LOCALHOST.
