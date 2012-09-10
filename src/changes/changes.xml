@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
-    <!--
-    WICHTIG! - Daniel Bor - 29.11.2011
-    Wenn das neue JASMIN-Modul 2.5.0 verwendet wird,
-    müssen noch Änderungen in der depend.xml und der metatags.xml vorgenommen werden
-    -->
-    <release date="2012-08-xx" version="3.0.0">
-      <action date="2012-08-22" dev="mhm" type="update">
-        Update sushi 2.7 to 3.0.
-      </action>
+    <release date="2012-09-xx" version="3.0.0">
       <action date="2012-08-22" dev="mhm" type="add">
         Added Sass processing for all css files.
       </action>
@@ -17,17 +9,20 @@
         Added "call" comments to replace base LOCALHOST.
       </action>
       <action date="2012-03-30" dev="mhm" type="remove">
-        Base LOCALHOST is not dumped but issues a deprecated warning.
+        Base LOCALHOST issues a deprecated warning now.
       </action>
       <action date="2012-03-30" dev="mhm" type="remove">
-        Pustefix Repository Projects are no longer suppored.
+        Pustefix Repository Projects are no longer supported.
         Base "PROJECT" and the parameters "project" and "projectDescriptor" have been removed.
       </action>
       <action date="2012-03-30" dev="mhm" type="update">
-        Update yuicompressor 2.3.6 to 2.4.6.
+        Updated yuicompressor 2.3.6 to 2.4.6.
       </action>
       <action date="2012-03-29" dev="mhm" type="update">
         Report error for libraries without wsd.properties.
+      </action>
+      <action date="2012-08-22" dev="mhm" type="update">
+        Update sushi 2.7 to 3.0.
       </action>
     </release>
     <release date="2012-07-05" version="2.5.10">
