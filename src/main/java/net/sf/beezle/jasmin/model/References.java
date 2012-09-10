@@ -50,6 +50,12 @@ public class References {
     public static final int LINE_BREAK = 300;
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(References.class);
+    private static final Mapper SSASS;
+
+    static {
+        SSASS = new Mapper("net.sf.beezle.ssass.Mapper");
+        SSASS.load();
+    }
 
     public static References create(MimeType type, boolean minimize, Node node) {
         References result;
@@ -88,7 +94,8 @@ public class References {
         if (type == MimeType.CSS) {
             output = new Output(writer, overallMinimize);
             // TODO: expensive
-            mapper = new Mapper("net.sf.beezle.ssass.Mapper", new ExceptionErrorHandler());
+            mapper = SSASS.newInstance();
+            mapper.setErrorHandler(new ExceptionErrorHandler());
         } else {
             output = null;
             mapper = null;
