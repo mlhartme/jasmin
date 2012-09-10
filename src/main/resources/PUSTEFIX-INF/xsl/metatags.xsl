@@ -6,7 +6,7 @@
   xmlns:shop="http://www.schlund.de/pustefix/shop"
   xmlns:cxs="http://pustefix.sourceforge.net/properties200401"
   xmlns:ixsl="http://www.w3.org/1999/XSL/TransformOutputAlias"
-  xmlns:jasmin="java:com.oneandone.jasmin.main.Servlet"
+  xmlns:jasmin="java:net.sf.beezle.jasmin.main.Servlet"
   exclude-result-prefixes="cxs">
 
   <xsl:template match="shop:load-jasmin-modules">
@@ -21,13 +21,13 @@
     <ixsl:if test="true()">
 
       <ixsl:variable name="configuration-temp">
-        <xsl:call-template name="pfx:include"> 
+        <xsl:call-template name="pfx:include">
           <xsl:with-param name="part" select="$part" />
           <xsl:with-param name="noerror" select="'true'" />
           <xsl:with-param name="noedit" select="'true'" />
         </xsl:call-template>
       </ixsl:variable>
-      
+
       <ixsl:variable xmlns:exslt="http://exslt.org/common" name="configuration" select="exslt:node-set($configuration-temp)" />
 
       <ixsl:variable name="modules">
@@ -61,7 +61,7 @@
           </ixsl:otherwise>
         </ixsl:choose>
       </ixsl:variable>
-      
+
       <ixsl:variable name="modules-dynamic">
         <ixsl:variable name="mode" select="'dynamic'" />
         <ixsl:for-each select="$configuration/module">
@@ -214,7 +214,7 @@
                 </ixsl:otherwise>
               </ixsl:choose>
             </xsl:otherwise>
-          </xsl:choose>        
+          </xsl:choose>
         </xsl:if>
       </xsl:if>
 
@@ -272,7 +272,7 @@
   </xsl:template>
 
   <xsl:template name="shop:helper-switchmodus">
-    
+
     <ixsl:if test="not(./pages/exclude-page[. = $page])">
       <ixsl:if test="($mode = 'prefix' or $mode = 'suffix' or (not($mode) and ./pages/page[. = $page or . = 'all']) or ($mode = 'all' and ./pages/page[. = 'all']) or ($mode = 'dynamic' and ./pages/page[. = $page]))">
         <xsl:if test="$prohibitEdit = 'no'">
@@ -293,7 +293,7 @@
         </ixsl:for-each>
       </ixsl:if>
     </ixsl:if>
-    
+
   </xsl:template>
 
   <xsl:template match="shop:conditional-comment">
