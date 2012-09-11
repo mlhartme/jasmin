@@ -93,7 +93,6 @@ public class References {
 
         if (type == MimeType.CSS) {
             output = new Output(writer, overallMinimize);
-            // TODO: expensive
             mapper = SSASS.newInstance();
             mapper.setErrorHandler(new ExceptionErrorHandler());
         } else {
@@ -132,7 +131,6 @@ public class References {
                     }
                     break;
                 case CSS :
-                    // TODO: error messages
                     results = mapper.run(node);
                     if (results == null) {
                         throw new IOException(node.toString() + ": css/sass error");
