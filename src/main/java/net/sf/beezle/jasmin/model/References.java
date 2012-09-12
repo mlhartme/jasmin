@@ -47,8 +47,15 @@ import java.util.logging.Logger;
 /** Reference to a node, with minimize flag and type. */
 public class References {
     public static final byte LF = 10;
+    public static final int LINE_BREAK = 300;
 
     private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(References.class);
+    private static final Mapper SSASS;
+
+    static {
+        SSASS = new Mapper("net.sf.beezle.ssass.Mapper");
+        SSASS.load();
+    }
 
     public static References create(MimeType type, boolean minimize, Node node) {
         References result;
@@ -66,8 +73,8 @@ public class References {
     public References(MimeType type, boolean overallMinimize) {
         this.type = type;
         this.overallMinimize = overallMinimize;
-        this.minimizes = new ArrayList<Boolean>();
-        this.nodes = new ArrayList<Node>();
+        this.minimizes = new ArrayList<>();
+        this.nodes = new ArrayList<>();
     }
 
     public void add(boolean minimize, Node node) {
@@ -86,8 +93,8 @@ public class References {
 
         if (type == MimeType.CSS) {
             output = new Output(writer, overallMinimize);
-            // TODO: expensive
-            mapper = new Mapper("net.sf.beezle.ssass.Mapper", new ExceptionErrorHandler());
+            mapper = SSASS.newInstance();
+            mapper.setErrorHandler(new ExceptionErrorHandler());
         } else {
             output = null;
             mapper = null;
@@ -112,7 +119,7 @@ public class References {
                         messages = new ByteArrayOutputStream();
                         try {
                             new JavaScriptCompressor(reader, new ToolErrorReporter(true, new PrintStream(messages))).compress(
-                                    writer, MimeType.LINE_BREAK, false, false, true, true);
+                                    writer, LINE_BREAK, false, false, true, true);
                         } catch (EvaluatorException e) {
                             throw new IOException(srcName + ":" + e.getMessage() + "\n" + messages.toString("utf-8"), e);
                         } catch (IOException e) {
@@ -124,7 +131,6 @@ public class References {
                     }
                     break;
                 case CSS :
-                    // TODO: error messages
                     results = mapper.run(node);
                     if (results == null) {
                         throw new IOException(node.toString() + ": css/sass error");
