@@ -10,7 +10,7 @@
   </servlet>
   <servlet>
     <servlet-name>jasmin</servlet-name>
-    <servlet-class>net.sf.beezle.jasmin.main.Servlet</servlet-class>
+    <servlet-class>net.oneandone.jasmin.main.Servlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>hello</servlet-name>

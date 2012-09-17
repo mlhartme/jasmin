@@ -2,9 +2,9 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>net.sf.beezle.maven.poms</groupId>
-    <artifactId>parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <groupId>net.oneandone.maven.poms</groupId>
+    <artifactId>foss-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <relativePath />
   </parent>
 
@@ -23,7 +23,7 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>net.sf.beezle</groupId>
+      <groupId>net.oneandone</groupId>
       <artifactId>jasmin</artifactId>
       <version>3.0.0-SNAPSHOT</version>
     </dependency>
