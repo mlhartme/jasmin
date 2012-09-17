@@ -8,8 +8,8 @@
     <relativePath />
   </parent>
 
-  <name>Hello Jasmin</name>
-  <description>Simple Jasmin demo app</description>
+  <name>Hello, Jasmin</name>
+  <description>Simple Jasmin demo app. Run "mvn clean tomcat:run-war" and point your browser to localhost:8080/hello/.</description>
   <groupId>example</groupId>
   <artifactId>hello</artifactId>
   <version>1.0.0-SNAPSHOT</version>
