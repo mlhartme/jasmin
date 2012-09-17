@@ -1,0 +1,4 @@
+<library>
+  <js>jasmin/**/*.js</js>
+  <css>jasmin/**/*.css</css>
+</library>

@@ -11,7 +11,11 @@ public class Hello extends HttpServlet {
         resp.setContentType("text/html");
         writer = resp.getWriter();
         writer.write("<html><body><h1>Hello, Jasmin</h1>\n");
-        writer.write("<a href='xml/jasmin/admin/'>Admin page</a>");
+        writer.write("<ul>\n");
+        writer.write("  <a href='xml/jasmin/admin/'>Admin page</a>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js/lead'>foo/bar.js</a>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js-min/lead'>foo/bar.js minimiert</a>\n");
+        writer.write("</ul>\n");
         writer.write("</body></html>\n");
         writer.close();
     }
