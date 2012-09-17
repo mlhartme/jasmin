@@ -391,8 +391,12 @@ public class Servlet extends HttpServlet {
             return false;
         }
         userAgent = request.getHeader("User-Agent");
-        if (userAgent == null || blacklisted(userAgent)) {
-            LOG.info("user-agent not white-listed for gzip: " + userAgent);
+        if (userAgent == null) {
+            LOG.info("unknown user-agent");
+            return false;
+        }
+        if (blacklisted(userAgent)) {
+            LOG.info("user-agent blacklisted: " + userAgent);
             return false;
         }
         return true;

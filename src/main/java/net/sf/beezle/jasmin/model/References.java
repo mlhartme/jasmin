@@ -29,24 +29,15 @@ import net.sf.beezle.ssass.scss.Stylesheet;
 import net.sf.beezle.sushi.fs.GetLastModifiedException;
 import net.sf.beezle.sushi.fs.Node;
 import net.sf.beezle.sushi.fs.file.FileNode;
-import net.sf.beezle.sushi.fs.webdav.WebdavFilesystem;
 import net.sf.beezle.sushi.fs.zip.ZipNode;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Formatter;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
 
 /** Reference to a node, with minimize flag and type. */
 public class References {
@@ -202,80 +193,6 @@ public class References {
             builder.append(minimizes.get(i) ? "(min) " : " ");
         }
         return builder.toString();
-    }
-
-    //--
-
-    public static final org.apache.log4j.Logger WIRE_LOG = org.apache.log4j.Logger.getLogger("LOGGER_JASMIN_WIRE");
-    public static final Logger JASMIN_WIRE_LOG = WebdavFilesystem.WIRE;
-
-    private static void initLogging() {
-        if (WIRE_LOG.isDebugEnabled()) {
-            if (JASMIN_WIRE_LOG.getHandlers().length == 0) {
-                LOG.info("enable jasmin wire log");
-                enableWireLog();
-            }
-        } else {
-            if (JASMIN_WIRE_LOG.getHandlers().length != 0) {
-                LOG.info("disable jasmin wire log");
-                disableWireLog();
-            }
-        }
-    }
-
-    private static void disableWireLog() {
-        JASMIN_WIRE_LOG.setLevel(Level.OFF);
-        for (Handler handler : JASMIN_WIRE_LOG.getHandlers()) {
-            JASMIN_WIRE_LOG.removeHandler(handler);
-        }
-    }
-
-    private static void enableWireLog() {
-        Handler handler;
-
-        JASMIN_WIRE_LOG.setLevel(Level.FINE);
-        handler = new BridgeHandler(WIRE_LOG);
-        handler.setFormatter(new Formatter() {
-                    @Override
-                    public String format(LogRecord record) {
-                        String message;
-                        Throwable e;
-                        StringBuilder result;
-
-                        message = record.getMessage();
-                        result = new StringBuilder(message.length() + 1);
-                        result.append(message);
-                        result.append('\n');
-                        e = record.getThrown();
-                        if (e != null) {
-                            // TODO getStacktrace(e, result);
-                        }
-                        return result.toString();
-                    }
-                });
-
-        JASMIN_WIRE_LOG.addHandler(handler);
-    }
-
-    public static class BridgeHandler extends Handler {
-        private final org.apache.log4j.Logger dest;
-
-        public BridgeHandler(org.apache.log4j.Logger dest) {
-            this.dest = dest;
-        }
-
-        @Override
-        public void publish(LogRecord record) {
-            dest.log(org.apache.log4j.Level.DEBUG, record.getMessage(), record.getThrown());
-        }
-
-        @Override
-        public void flush() {
-        }
-
-        @Override
-        public void close() {
-        }
     }
 
     //--
