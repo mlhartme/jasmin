@@ -391,7 +391,7 @@ public class Servlet extends HttpServlet {
             return false;
         }
         userAgent = request.getHeader("User-Agent");
-        if (userAgent == null || !whiteListed(userAgent)) {
+        if (userAgent == null || blacklisted(userAgent)) {
             LOG.info("user-agent not white-listed for gzip: " + userAgent);
             return false;
         }
@@ -401,28 +401,24 @@ public class Servlet extends HttpServlet {
     // see http://msdn.microsoft.com/en-us/repository/ms537503(VS.85).aspx
     private static final Pattern MSIE = Pattern.compile("Mozilla/4.0 \\(compatible; MSIE (\\d+)\\..*");
 
-    private static final Pattern MOZILLA = Pattern.compile("Mozilla/(\\d+)\\..*");
+    public static boolean blacklisted(String str) {
+        Integer version;
 
-    public static boolean whiteListed(String str) {
-        if (atLeast(str, MSIE, 7)) {
-            return true;
-        }
-        if (atLeast(str, MOZILLA, 5)) {
-            return true;
-        }
-        return false;
+        version = versionOf(str, MSIE);
+        return version != null && version < 7;
     }
 
-    private static boolean atLeast(String str, Pattern pattern, int num) {
+    private static Integer versionOf(String str, Pattern client) {
         String version;
         Matcher matcher;
 
-        matcher = pattern.matcher(str);
+        matcher = client.matcher(str);
         if (matcher.matches()) {
             version = matcher.group(1);
-            return Integer.parseInt(version) >= num;
+            return new Integer(version);
+        } else {
+            return null;
         }
-        return false;
     }
 
     // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html

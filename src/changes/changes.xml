@@ -2,6 +2,9 @@
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
     <release date="2012-09-xx" version="3.0.0">
+      <action date="2012-09-17" dev="mhm" type="update">
+        Serve gzipped content for all browers with the appropriate header - except IE 6.
+      </action>
       <action date="2012-08-24" dev="mhm" type="update">
         Changed "svn" to "scm" in order to support git. "scm" starts with "scm:svn" for svn repositories,
         and with "scm:git" for git repositories.

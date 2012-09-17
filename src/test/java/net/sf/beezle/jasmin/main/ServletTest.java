@@ -59,18 +59,17 @@ public class ServletTest {
     }
 
     @Test
-    public void whitelist() {
-        assertFalse(Servlet.whiteListed(""));
+    public void blacklisted() {
+        assertFalse(Servlet.blacklisted(""));
         // mozilla
-        assertFalse(Servlet.whiteListed(
+        assertFalse(Servlet.blacklisted(
                 "Mozilla/4.0 (X11; U; Linux x86_64; de; rv:1.9.0.10) Gecko/2009042523 Ubuntu/9.04 (jaunty) Firefox/3.0.10"));
-        assertTrue(Servlet.whiteListed(
-                "Mozilla/5.0 (X11; U; Linux x86_64; de; rv:1.9.0.10) Gecko/2009042523 Ubuntu/9.04 (jaunty) Firefox/3.0.10"));
-        assertTrue(Servlet.whiteListed(
-                "Mozilla/14.0 (X11; U; Linux x86_64; de; rv:1.9.0.10) Gecko/2009042523 Ubuntu/9.04 (jaunty) Firefox/3.0.10"));
         // MSIE
-        assertTrue(Servlet.whiteListed(
+        assertFalse(Servlet.blacklisted(
                 "Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 6.0; Trident/4.0; GTB6; SLCC1; .NET CLR 2.0.50727; "
+                        + "Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618)"));
+        assertTrue(Servlet.blacklisted(
+                "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 6.0; Trident/4.0; GTB6; SLCC1; .NET CLR 2.0.50727; "
                         + "Media Center PC 5.0; .NET CLR 3.5.30729; .NET CLR 3.0.30618)"));
     }
 
