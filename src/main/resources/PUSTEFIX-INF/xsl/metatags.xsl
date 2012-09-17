@@ -6,7 +6,7 @@
   xmlns:shop="http://www.schlund.de/pustefix/shop"
   xmlns:cxs="http://pustefix.sourceforge.net/properties200401"
   xmlns:ixsl="http://www.w3.org/1999/XSL/TransformOutputAlias"
-  xmlns:jasmin="java:net.sf.beezle.jasmin.main.Servlet"
+  xmlns:jasmin="java:net.oneandone.jasmin.main.Servlet"
   exclude-result-prefixes="cxs">
 
   <xsl:template match="shop:load-jasmin-modules">

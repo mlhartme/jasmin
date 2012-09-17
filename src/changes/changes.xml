@@ -16,7 +16,7 @@
         and with "scm:git" for git repositories.
       </action>
       <action date="2012-08-24" dev="mhm" type="update">
-        Changed groupId and package to net.sf.beezle.
+        Renamed com.oneandone.jasmin to net.oneandone.jasmin.
       </action>
       <action date="2012-08-22" dev="mhm" type="update">
         Update sushi 2.7 to 3.0.
