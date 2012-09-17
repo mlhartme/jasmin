@@ -43,7 +43,8 @@ public class ReferencesTest {
             js("a=\"");
             fail();
         } catch (IOException e) {
-            assertTrue(e.getMessage().contains("line 1: unterminated string literal"));
+            assertTrue(e.getMessage().contains("1:"));
+            assertTrue(e.getMessage().contains("unterminated string literal"));
         }
     }
 

@@ -3,6 +3,9 @@
   <body>
     <release date="2012-09-xx" version="3.0.0">
       <action date="2012-09-17" dev="mhm" type="update">
+        Switch from YUI Compressor to Google Closure Compiler.
+      </action>
+      <action date="2012-09-17" dev="mhm" type="update">
         Serve gzipped content for all browers with the appropriate header - except IE 6.
       </action>
       <action date="2012-08-24" dev="mhm" type="update">

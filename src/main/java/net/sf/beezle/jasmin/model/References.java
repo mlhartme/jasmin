@@ -16,7 +16,11 @@
  */
 package net.sf.beezle.jasmin.model;
 
-import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.google.javascript.jscomp.Compiler;
+
+import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.Result;
+import com.google.javascript.jscomp.SourceFile;
 import net.sf.beezle.mork.mapping.ExceptionErrorHandler;
 import net.sf.beezle.mork.mapping.Mapper;
 import net.sf.beezle.mork.misc.GenericException;
@@ -27,16 +31,16 @@ import net.sf.beezle.sushi.fs.Node;
 import net.sf.beezle.sushi.fs.file.FileNode;
 import net.sf.beezle.sushi.fs.webdav.WebdavFilesystem;
 import net.sf.beezle.sushi.fs.zip.ZipNode;
-import org.mozilla.javascript.EvaluatorException;
-import org.mozilla.javascript.tools.ToolErrorReporter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -100,10 +104,8 @@ public class References {
             mapper = null;
         }
         for (int i = 0; i < nodes.size(); i++) {
-            boolean minimize;
             Node node;
 
-            minimize = minimizes.get(i);
             node = nodes.get(i);
             if (i > 0) {
                 writer.write(LF);
@@ -113,22 +115,24 @@ public class References {
             }
             switch (type) {
                 case JS :
-                    if (minimize) {
-                        reader = node.createReader();
-                        srcName = node.toString();
-                        messages = new ByteArrayOutputStream();
-                        try {
-                            new JavaScriptCompressor(reader, new ToolErrorReporter(true, new PrintStream(messages))).compress(
-                                    writer, LINE_BREAK, false, false, true, true);
-                        } catch (EvaluatorException e) {
-                            throw new IOException(srcName + ":" + e.getMessage() + "\n" + messages.toString("utf-8"), e);
-                        } catch (IOException e) {
-                            throw new IOException(srcName + ": compression failed: " + e.getMessage(), e);
+                    reader = node.createReader();
+                    srcName = node.toString();
+                    Compiler compiler = new Compiler();
+                    List<SourceFile> sources;
+                    sources = new ArrayList<>();
+                    sources.add(SourceFile.fromReader(srcName, reader));
+                    CompilerOptions options = new CompilerOptions();
+                    options.setOutputCharset("utf-8");
+                    Result result = compiler.compile(new ArrayList<SourceFile>(), sources, options);
+                    reader.close();
+                    if (!result.success) {
+                        if (result.errors.length != 1) {
+                            throw new IllegalStateException();
                         }
-                        reader.close();
-                    } else {
-                        writer.write(node.readString());
+                        throw new IOException(result.errors[0].sourceName + ":" + result.errors[0].lineNumber + ":"
+                                + result.errors[0].description);
                     }
+                    writer.write(overallMinimize ? compiler.toSource() : node.readString());
                     break;
                 case CSS :
                     results = mapper.run(node);
