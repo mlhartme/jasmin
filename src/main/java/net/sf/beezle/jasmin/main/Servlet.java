@@ -146,7 +146,7 @@ public class Servlet extends HttpServlet {
                         throw new IOException(node.getURI() + " has lastModifiedDate in the future: "
                                 + new Date(lastModified) + "(now: " + new Date(now) + ")");
                     }
-                    LOG.info("reloading jasmin for application '" + application.getName() + "' - changed file: " + node);
+                    LOG.info("reloading jasmin for application '" + application.getContextPath() + "' - changed file: " + node);
                     engine = null;
                     resolver.reset();
                 }

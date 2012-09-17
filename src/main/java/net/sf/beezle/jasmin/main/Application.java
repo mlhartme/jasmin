@@ -48,9 +48,8 @@ public class Application {
         autoReload = getBoolean(config, "autoReload", autoReload);
         resolver = new Resolver(world, autoReload);
         applicationDescriptor = getApplicationDescriptor(config, docroot, resolver);
-        siteId = getString(config, "siteId", docroot.getName());
         expires = getInteger(config, "expires", Application.MANY_YEARS);
-        return new Application(config.getServletContext(), resolver, siteId, applicationDescriptor, expires);
+        return new Application(config.getServletContext(), resolver, applicationDescriptor, expires);
     }
 
     public static FileNode file(World world, String str) throws IOException {
@@ -84,7 +83,6 @@ public class Application {
 
     private final ServletContext context;
     public final Resolver resolver;
-    public final String name;
 
     /** may be null. */
     public final Node applicationDescriptor;
@@ -98,16 +96,15 @@ public class Application {
 
     public static final int MANY_YEARS = 60 * 60 * 24 * 365 * 15;
 
-    public Application(ServletContext context, Resolver resolver, String name, Node applicationDescriptor, Integer expires) {
+    public Application(ServletContext context, Resolver resolver, Node applicationDescriptor, Integer expires) {
         this.context = context;
         this.resolver = resolver;
-        this.name = name;
         this.applicationDescriptor = applicationDescriptor;
         this.expires = expires;
     }
 
-    public String getName() {
-        return name;
+    public String getContextPath() {
+        return context.getContextPath();
     }
 
     public Engine createEngineSimple(Node docroot, Node localhost) throws IOException {
