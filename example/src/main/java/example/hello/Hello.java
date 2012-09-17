@@ -1,9 +1,9 @@
-package com.oneandone.devel.maven.hellowar;
+package example.hello;
 
 import javax.servlet.http.HttpServlet;
 import java.io.Writer;
 
-public class HelloWar extends HttpServlet {
+public class Hello extends HttpServlet {
     protected void doGet(javax.servlet.http.HttpServletRequest req, javax.servlet.http.HttpServletResponse resp)
             throws javax.servlet.ServletException, java.io.IOException {
         Writer writer;

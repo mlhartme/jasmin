@@ -8,10 +8,10 @@
     <relativePath />
   </parent>
 
-  <name>Hello World War</name>
-  <description>Servlet to print hello world</description>
-  <groupId>com.oneandone.devel.maven</groupId>
-  <artifactId>hellowar</artifactId>
+  <name>Hello Jasmin</name>
+  <description>Simple Jasmin demo app</description>
+  <groupId>example</groupId>
+  <artifactId>hello</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>war</packaging>
 

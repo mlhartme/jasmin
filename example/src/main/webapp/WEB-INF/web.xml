@@ -5,15 +5,15 @@
          version="2.5">
 
   <servlet>
-    <servlet-name>hellowar</servlet-name>
-    <servlet-class>com.oneandone.devel.maven.hellowar.HelloWar</servlet-class>
+    <servlet-name>hello</servlet-name>
+    <servlet-class>example.hello.Hello</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>jasmin</servlet-name>
     <servlet-class>net.sf.beezle.jasmin.main.Servlet</servlet-class>
   </servlet>
   <servlet-mapping>
-    <servlet-name>hellowar</servlet-name>
+    <servlet-name>hello</servlet-name>
     <url-pattern>/*</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
