@@ -1,2 +1,2 @@
 /* jasmin */
-variant min
+"variant min"
