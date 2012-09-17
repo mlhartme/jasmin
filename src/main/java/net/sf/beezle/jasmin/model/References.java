@@ -16,11 +16,16 @@
  */
 package net.sf.beezle.jasmin.model;
 
+import com.google.javascript.jscomp.BasicErrorManager;
+import com.google.javascript.jscomp.CheckLevel;
 import com.google.javascript.jscomp.Compiler;
 
 import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.ErrorManager;
+import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.Result;
 import com.google.javascript.jscomp.SourceFile;
+import net.sf.beezle.jasmin.main.Servlet;
 import net.sf.beezle.mork.mapping.ExceptionErrorHandler;
 import net.sf.beezle.mork.mapping.Mapper;
 import net.sf.beezle.mork.misc.GenericException;
@@ -42,9 +47,6 @@ import java.util.List;
 /** Reference to a node, with minimize flag and type. */
 public class References {
     public static final byte LF = 10;
-    public static final int LINE_BREAK = 300;
-
-    private static final org.apache.log4j.Logger LOG = org.apache.log4j.Logger.getLogger(References.class);
     private static final Mapper SSASS;
 
     static {
@@ -108,7 +110,7 @@ public class References {
                 case JS :
                     reader = node.createReader();
                     srcName = node.toString();
-                    Compiler compiler = new Compiler();
+                    Compiler compiler = new Compiler(new LoggerErrorManager());
                     List<SourceFile> sources;
                     sources = new ArrayList<>();
                     sources.add(SourceFile.fromReader(srcName, reader));
@@ -217,4 +219,26 @@ public class References {
     }
 
 
+    //--
+
+    public class LoggerErrorManager extends BasicErrorManager {
+        public LoggerErrorManager() {
+        }
+
+        @Override
+        public void println(CheckLevel level, JSError error) {
+            switch (level) {
+                case ERROR:
+                    Servlet.LOG.debug("error: " + error.toString());
+                    break;
+                case WARNING:
+                    Servlet.LOG.debug("warning: " + error.toString());
+                    break;
+            }
+        }
+
+        @Override
+        protected void printSummary() {
+        }
+    }
 }
