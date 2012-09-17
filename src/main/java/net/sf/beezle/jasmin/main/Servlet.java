@@ -644,30 +644,16 @@ public class Servlet extends HttpServlet {
 
     /** @param request may be null */
     private void error(HttpServletRequest request, String method, Throwable throwable) {
-        /* TODO: LogMessage message;
-        Enumeration<String> names;
-        Enumeration<String> values;
-        String name;
-        String value;
+        StringBuilder message;
 
-        message = new LogMessage();
-        message.setServlet("jasmin");
-        message.setSubject(method + ":" + throwable.getMessage());
+        message = new StringBuilder();
+        message.append(method).append(":").append(throwable.getMessage());
         if (request != null) {
-            message.setPage(referer(request));
-            message.setUri(pathInfo(request));
-            names = request.getHeaderNames();
-            while (names.hasMoreElements()) {
-                name = names.nextElement();
-                values = request.getHeaders(name);
-                while (values.hasMoreElements()) {
-                    value = values.nextElement();
-                    message.getAdditionalValues().put("header " + name, value);
-                }
-            }
-            // currently unused:  message.setBody()
-        }*/
-        LOG.error(method + ":" + throwable.getMessage(), throwable);
+            message.append('(');
+            message.append("referer=").append(referer(request));
+            message.append(",pathinfo=").append(pathInfo(request));
+        }
+        LOG.error(message.toString(), throwable);
     }
 
     private static String pathInfo(HttpServletRequest request) {

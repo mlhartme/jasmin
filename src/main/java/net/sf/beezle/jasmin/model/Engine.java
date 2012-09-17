@@ -62,7 +62,6 @@ public class Engine {
         try {
             content = doProcess(path);
         } catch (IOException e) {
-            // TODO: development only?
             Servlet.LOG.error("process failed: " + e.getMessage(), e);
             response.setStatus(500);
             response.setContentType("text/html");
