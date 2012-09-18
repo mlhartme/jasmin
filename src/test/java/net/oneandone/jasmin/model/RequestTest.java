@@ -76,4 +76,15 @@ public class RequestTest {
         assertEquals("x", request.modules);
         assertEquals("foo", request.variant);
     }
+
+    @Test
+    public void noVariant() {
+        Request request;
+
+        request = Request.parse("x/css-min");
+        assertSame(MimeType.CSS, request.type);
+        assertTrue(request.minimize);
+        assertEquals("x", request.modules);
+        assertEquals("lead", request.variant);
+    }
 }

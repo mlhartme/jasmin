@@ -34,21 +34,24 @@ public class Request {
         if (first == -1) {
             throw new IllegalArgumentException("missing slash: '" + path + "'");
         }
+        modules = path.substring(0, first);
+
         second = path.indexOf('/', first + 1);
         if (second == -1) {
-            throw new IllegalArgumentException("missing second slash: " + path);
+            typeName = path.substring(first + 1).toUpperCase();
+            variant = "lead";
+        } else {
+            typeName = path.substring(first + 1, second).toUpperCase();
+            variant = path.substring(second + 1);
+            if (variant.length() == 0) {
+                throw new IllegalArgumentException("empty variant: " + path);
+            }
         }
-        modules = path.substring(0, first);
-        typeName = path.substring(first + 1, second).toUpperCase();
         minimize = typeName.endsWith("-MIN");
         if (minimize) {
             typeName = typeName.substring(0, typeName.length() - 4);
         }
         type = MimeType.valueOf(typeName);
-        variant = path.substring(second + 1);
-        if (variant.length() == 0) {
-            throw new IllegalArgumentException("empty variant: " + path);
-        }
         return new Request(modules, type, minimize, variant);
     }
 
