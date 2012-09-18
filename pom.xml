@@ -76,6 +76,12 @@
       <groupId>org.pustefixframework</groupId>
       <artifactId>pustefix-live</artifactId>
       <version>0.18.28</version>
+      <exclusions><!-- TODO: dump when pustefix is on 1.2.17 -->
+        <exclusion>
+          <groupId>log4j</groupId>
+          <artifactId>log4j</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
