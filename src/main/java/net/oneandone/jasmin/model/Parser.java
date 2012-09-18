@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class Parser {
-    /** @return variant */
     public static void parseComment(String str, List<String> depends, List<String> calls)  throws IOException {
         final String prefix = "/* jasmin";
         int idx;
