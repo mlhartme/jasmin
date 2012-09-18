@@ -20,7 +20,6 @@ import com.google.javascript.jscomp.CheckLevel;
 import com.google.javascript.jscomp.Compiler;
 
 import com.google.javascript.jscomp.CompilerOptions;
-import com.google.javascript.jscomp.ErrorManager;
 import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.Result;
 import com.google.javascript.jscomp.SourceFile;
@@ -35,9 +34,7 @@ import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
 import net.oneandone.sushi.fs.zip.ZipNode;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -80,24 +77,70 @@ public class References {
 
     /** core method */
     public void writeTo(Writer writer) throws IOException {
-        ByteArrayOutputStream messages;
-        Reader reader;
-        String srcName;
+        switch (type) {
+            case CSS:
+                writeCssTo(writer);
+                break;
+            case JS:
+                writeJsTo(writer);
+                break;
+            default:
+                throw new IllegalStateException(type.toString());
+        }
+    }
+
+    /** core method */
+    private void writeJsTo(Writer writer) throws IOException {
+        Compiler compiler;
+        CompilerOptions options;
+        List<SourceFile> externals;
+        List<SourceFile> sources;
+        Result result;
+        boolean first;
+
+        compiler = new Compiler(new LoggerErrorManager());
+        options = new CompilerOptions();
+        options.setOutputCharset("utf-8");
+        sources = new ArrayList<>();
+        externals = new ArrayList<>();
+        for (Node node : nodes) {
+            sources.add(SourceFile.fromCode(location(node), node.readString()));
+        }
+        result = compiler.compile(externals, sources, options);
+        if (!result.success) {
+            if (result.errors.length < 1) {
+                throw new IllegalStateException();
+            }
+            throw new IOException(result.errors[0].sourceName + ":" + result.errors[0].lineNumber + ":" + result.errors[0].description);
+        }
+        if (overallMinimize) {
+            writer.write(compiler.toSource());
+        } else {
+            first = true;
+            for (SourceFile source : sources) {
+                if (first) {
+                    first = false;
+                } else {
+                    writer.write(LF);
+                }
+                if (!overallMinimize) {
+                    writer.write(type.comment(source.getName()));
+                }
+                writer.write(source.getCode());
+            }
+        }
+    }
+
+    private void writeCssTo(Writer writer) throws IOException {
         Object[] results;
         Output output;
         Mapper mapper;
+        Node node;
 
-        if (type == MimeType.CSS) {
-            output = new Output(writer, overallMinimize);
-            mapper = SSASS.newInstance();
-            mapper.setErrorHandler(new ExceptionErrorHandler());
-        } else {
-            output = null;
-            mapper = null;
-        }
+        output = new Output(writer, overallMinimize);
+        mapper = SSASS.newInstance();
+        mapper.setErrorHandler(new ExceptionErrorHandler());
         for (int i = 0; i < nodes.size(); i++) {
-            Node node;
-
             node = nodes.get(i);
             if (i > 0) {
                 writer.write(LF);
@@ -105,40 +148,14 @@ public class References {
             if (!overallMinimize) {
                 writer.write(type.comment(location(node)));
             }
-            switch (type) {
-                case JS :
-                    reader = node.createReader();
-                    srcName = node.toString();
-                    Compiler compiler = new Compiler(new LoggerErrorManager());
-                    List<SourceFile> sources;
-                    sources = new ArrayList<>();
-                    sources.add(SourceFile.fromReader(srcName, reader));
-                    CompilerOptions options = new CompilerOptions();
-                    options.setOutputCharset("utf-8");
-                    Result result = compiler.compile(new ArrayList<SourceFile>(), sources, options);
-                    reader.close();
-                    if (!result.success) {
-                        if (result.errors.length != 1) {
-                            throw new IllegalStateException();
-                        }
-                        throw new IOException(result.errors[0].sourceName + ":" + result.errors[0].lineNumber + ":"
-                                + result.errors[0].description);
-                    }
-                    writer.write(overallMinimize ? compiler.toSource() : node.readString());
-                    break;
-                case CSS :
-                    results = mapper.run(node);
-                    if (results == null) {
-                        throw new IOException(node.toString() + ": css/sass error");
-                    }
-                    try {
-                        ((Stylesheet) results[0]).toCss(output);
-                    } catch (GenericException e) {
-                        throw new IOException(node.toString() + ": css generation failed: " + e.getMessage(), e);
-                    }
-                    break;
-                default :
-                    throw new IllegalArgumentException(type.toString());
+            results = mapper.run(node);
+            if (results == null) {
+                throw new IOException(node.toString() + ": css/sass error");
+            }
+            try {
+                ((Stylesheet) results[0]).toCss(output);
+            } catch (GenericException e) {
+                throw new IOException(node.toString() + ": css generation failed: " + e.getMessage(), e);
             }
         }
     }

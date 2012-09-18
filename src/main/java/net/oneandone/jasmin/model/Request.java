@@ -16,7 +16,6 @@
 package net.oneandone.jasmin.model;
 
 import net.oneandone.jasmin.main.Servlet;
-import net.oneandone.ssass.scss.term.Strng;
 
 /**
  * Refers to modules. Format:
