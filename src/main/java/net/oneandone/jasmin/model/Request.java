@@ -15,6 +15,9 @@
  */
 package net.oneandone.jasmin.model;
 
+import net.oneandone.jasmin.main.Servlet;
+import net.oneandone.ssass.scss.term.Strng;
+
 /**
  * Refers to modules. Format:
  *
@@ -22,37 +25,52 @@ package net.oneandone.jasmin.model;
  */
 public class Request {
     public static Request parse(String path) {
-        int first;
-        int second;
-        String modules;
+        int firstIdx;
+        int secondIdx;
+        String first;
+        String second;
         String variant;
-        String typeName;
-        MimeType type;
-        boolean minimize;
+        Request result;
 
-        first = path.indexOf('/');
-        if (first == -1) {
+        firstIdx = path.indexOf('/');
+        if (firstIdx == -1) {
             throw new IllegalArgumentException("missing slash: '" + path + "'");
         }
-        modules = path.substring(0, first);
-
-        second = path.indexOf('/', first + 1);
-        if (second == -1) {
-            typeName = path.substring(first + 1).toUpperCase();
+        first = path.substring(0, firstIdx);
+        secondIdx = path.indexOf('/', firstIdx + 1);
+        if (secondIdx == -1) {
+            second = path.substring(firstIdx + 1);
             variant = "lead";
         } else {
-            typeName = path.substring(first + 1, second).toUpperCase();
-            variant = path.substring(second + 1);
+            second = path.substring(firstIdx + 1, secondIdx);
+            variant = path.substring(secondIdx + 1);
             if (variant.length() == 0) {
                 throw new IllegalArgumentException("empty variant: " + path);
             }
         }
+
+        try {
+            result = create(first, second, variant);
+        } catch (IllegalArgumentException e) {
+            try {
+                result = create(second, first, variant);
+                Servlet.LOG.warn("deprecated request: type should preceed modules: " + path);
+            } catch (IllegalArgumentException eAgain) {
+                throw e;
+            }
+        }
+        return result;
+    }
+
+    public static Request create(String typeName, String modules, String variant) {
+        boolean minimize;
+
+        typeName = typeName.toUpperCase();
         minimize = typeName.endsWith("-MIN");
         if (minimize) {
             typeName = typeName.substring(0, typeName.length() - 4);
         }
-        type = MimeType.valueOf(typeName);
-        return new Request(modules, type, minimize, variant);
+        return new Request(modules, MimeType.valueOf(typeName), minimize, variant);
     }
 
     public final String modules;

@@ -39,9 +39,9 @@ public class Library {
     private final List<Module> modules;
 
     public Library() {
-        this.jss = new ArrayList<String>();
-        this.csss = new ArrayList<String>();
-        this.modules = new ArrayList<Module>();
+        this.jss = new ArrayList<>();
+        this.csss = new ArrayList<>();
+        this.modules = new ArrayList<>();
     }
 
     public List<String> jss() {

@@ -37,6 +37,17 @@ public class RequestTest {
     public void js() {
         Request request;
 
+        request = Request.parse("js/foo+bar/lead");
+        assertSame(MimeType.JS, request.type);
+        assertFalse(request.minimize);
+        assertEquals("foo+bar", request.modules);
+        assertEquals("lead", request.variant);
+    }
+
+    @Test
+    public void jsOld() {
+        Request request;
+
         request = Request.parse("foo+bar/js/lead");
         assertSame(MimeType.JS, request.type);
         assertFalse(request.minimize);
@@ -48,7 +59,7 @@ public class RequestTest {
     public void dotname() {
         Request request;
 
-        request = Request.parse("dot.name/css/x");
+        request = Request.parse("css/dot.name/x");
         assertEquals("dot.name", request.modules);
         assertEquals("x", request.variant);
         assertFalse(request.minimize);
@@ -59,7 +70,7 @@ public class RequestTest {
     public void not() {
         Request request;
 
-        request = Request.parse("!a/css/x");
+        request = Request.parse("css/!a/x");
         assertEquals("!a", request.modules);
         assertEquals("x", request.variant);
         assertFalse(request.minimize);
@@ -68,6 +79,17 @@ public class RequestTest {
 
     @Test
     public void css() {
+        Request request;
+
+        request = Request.parse("css-min/x/foo");
+        assertSame(MimeType.CSS, request.type);
+        assertTrue(request.minimize);
+        assertEquals("x", request.modules);
+        assertEquals("foo", request.variant);
+    }
+
+    @Test
+    public void cssOld() {
         Request request;
 
         request = Request.parse("x/css-min/foo");
@@ -81,7 +103,7 @@ public class RequestTest {
     public void noVariant() {
         Request request;
 
-        request = Request.parse("x/css-min");
+        request = Request.parse("css-min/x");
         assertSame(MimeType.CSS, request.type);
         assertTrue(request.minimize);
         assertEquals("x", request.modules);

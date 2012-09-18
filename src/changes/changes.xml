@@ -3,7 +3,8 @@
   <body>
     <release date="2012-09-xx" version="3.0.0">
       <action date="2012-09-18" dev="mhm" type="update">
-        Get Requests: tailing variant is optional (defaults to 'lead').
+        Get Requests: type preceeds module now (old ordering is still supported but yields a deprecated warnings);
+        tailing variant is optional (defaults to 'lead').
       </action>
       <action date="2012-09-17" dev="mhm" type="remote">
         Removed siteId parameter.
