@@ -35,7 +35,6 @@ public class Application {
         String str;
         Node applicationDescriptor;
         boolean autoReload;
-        String siteId;
         Integer expires;
         Resolver resolver;
 
