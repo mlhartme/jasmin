@@ -12,10 +12,10 @@ public class Hello extends HttpServlet {
         writer = resp.getWriter();
         writer.write("<html><body><h1>Hello, Jasmin</h1>\n");
         writer.write("  <a href='xml/jasmin/admin/'>Admin page</a><br/>\n");
-        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js/lead'>foo/bar.js</a><br/>\n");
-        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js-min/lead'>foo/bar.js minimiert</a><br/>\n");
-        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/css/lead'>foo/bar.css</a><br/>\n");
-        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/css-min/lead'>foo/bar.css minimiert</a><br/>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js'>foo/bar.js</a><br/>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/js-min'>foo/bar.js minimiert</a><br/>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/css'>foo/bar.css</a><br/>\n");
+        writer.write("  <a href='xml/jasmin/get/no-expires/hello-jasmin-foo-bar/css-min'>foo/bar.css minimiert</a><br/>\n");
         writer.write("</body></html>\n");
         writer.close();
     }
