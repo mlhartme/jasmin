@@ -6,6 +6,9 @@
         Get Requests: type preceeds module now (old ordering is still supported but yields a deprecated warnings);
         tailing variant is optional (defaults to 'lead').
       </action>
+      <action date="2012-09-18" dev="mhm" type="update">
+        Servlet mapping /xml/jasmin is deprecated now (and yields a warning when used in get requests), use /jasmin instead.
+      </action>
       <action date="2012-09-17" dev="mhm" type="remote">
         Removed siteId parameter.
       </action>

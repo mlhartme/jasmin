@@ -323,6 +323,9 @@ public class Servlet extends HttpServlet {
         boolean gzip;
         long date;
 
+        if ("/xml/jasmin".equals(request.getServletPath())) {
+            LOG.warn("deprecated servlet path '/xml/jasmin' - use '/jasmin' instead: " + path);
+        }
         idx = path.indexOf('/');
         if (idx == -1) {
             notFound(request, response);
