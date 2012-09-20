@@ -40,7 +40,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-/** A list of modules. Plus load functionality (including linking and reload file handling */
+/** A list of modules. Plus load functionality (including linking and reload file handling) */
 @net.oneandone.sushi.metadata.annotation.Type
 public class Repository {
     /** simplified load method for testing */
@@ -84,9 +84,9 @@ public class Repository {
             throw new IllegalArgumentException();
         }
         this.attributes = attributes;
-        this.modules = new ArrayList<Module>();
-        this.notLinked = new HashMap<Module, List<String>>();
-        this.reloadFiles = new ArrayList<Node>();
+        this.modules = new ArrayList<>();
+        this.notLinked = new HashMap<>();
+        this.reloadFiles = new ArrayList<>();
     }
 
     public List<Module> modules() {
@@ -181,8 +181,8 @@ public class Repository {
         Node resolved;
         boolean minimize;
 
-        includes = new ArrayList<Module>();
-        excludes = new ArrayList<Module>();
+        includes = new ArrayList<>();
+        excludes = new ArrayList<>();
         for (String name : Module.SEP.split(request.modules)) {
             if (name.length() == 0) {
                 throw new IllegalStateException();
@@ -210,7 +210,7 @@ public class Repository {
         List<String> results;
         String variant;
 
-        results = new ArrayList<String>();
+        results = new ArrayList<>();
         for (Module module : modules) {
             for (File file : module.files()) {
                 variant = file.getVariant();
@@ -247,7 +247,7 @@ public class Repository {
     }
 
     /**
-     * An applicationis not a classpath item because jasmin.xml is from WEB-INF, it's not a resource.
+     * An application is not a classpath item because jasmin.xml is from WEB-INF, it's not a resource.
      * I don't want to make it a resource (by moving WEB-INF/jasmin.xml to META-INF/jasmin.xml) because
      * all other config files reside in WEB-INF, and webapps usually have no META-INF directory at all.
      */
