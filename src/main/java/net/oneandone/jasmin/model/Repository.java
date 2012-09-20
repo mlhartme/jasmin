@@ -224,16 +224,17 @@ public class Repository {
 
     //--
 
+    /** Loads modules from classpath */
     public void loadClasspath(Resolver resolver) throws IOException {
         Enumeration<URL> e;
 
         e = getClass().getClassLoader().getResources(METAINF_DESCRIPTOR);
         while (e.hasMoreElements()) {
-            loadClasspathItem(resolver, e.nextElement());
+            loadModule(resolver, e.nextElement());
         }
     }
 
-    private void loadClasspathItem(Resolver resolver, URL url) throws IOException {
+    private void loadModule(Resolver resolver, URL url) throws IOException {
         FileNode classpathItem;
         Node descriptor;
         Node properties;
@@ -258,6 +259,7 @@ public class Repository {
         loadLibrary(resolver, base, descriptor, properties);
     }
 
+    /** Core method for loading. A library is a module or an application */
     public void loadLibrary(Resolver resolver, Node base, Node descriptor, Node properties) throws IOException {
         Source source;
         Module module;
