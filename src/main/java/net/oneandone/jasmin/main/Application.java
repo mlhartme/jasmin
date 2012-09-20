@@ -66,7 +66,7 @@ public class Application {
         if (explicit != null) {
             throw new IOException("'projectDescriptor' parameter no longer supported");
         }
-        result = application.join("WEB-INF/jasmin.xml");
+        result = application.join(Repository.APPLICATION_DESCRIPTOR);
         if (!result.exists()) {
             return null;
         }

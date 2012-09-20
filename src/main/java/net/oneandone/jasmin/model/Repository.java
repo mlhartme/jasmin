@@ -53,10 +53,10 @@ public class Repository {
         return repository;
     }
 
-    public static final String METAINF_DESCRIPTOR = "META-INF/jasmin.xml";
-
-    public static final String METAINF_PROPERTIES = "META-INF/wsd.properties";
-    public static final String WEBINF_PROPERTIES = "WEB-INF/wsd.properties";
+    public static final String MODULE_DESCRIPTOR = "META-INF/jasmin.xml";
+    public static final String MODULE_PROPERTIES = "META-INF/wsd.properties";
+    public static final String APPLICATION_DESCRIPTOR = "WEB-INF/jasmin.xml";
+    public static final String APPLICATION_PROPERTIES = "WEB-INF/wsd.properties";
 
     //--
 
@@ -228,7 +228,7 @@ public class Repository {
     public void loadClasspath(Resolver resolver) throws IOException {
         Enumeration<URL> e;
 
-        e = getClass().getClassLoader().getResources(METAINF_DESCRIPTOR);
+        e = getClass().getClassLoader().getResources(MODULE_DESCRIPTOR);
         while (e.hasMoreElements()) {
             loadModule(resolver, e.nextElement());
         }
@@ -240,10 +240,10 @@ public class Repository {
         Node properties;
         Node base;
 
-        classpathItem = resolver.getWorld().locateClasspathItem(url, "/" + METAINF_DESCRIPTOR);
+        classpathItem = resolver.getWorld().locateClasspathItem(url, "/" + MODULE_DESCRIPTOR);
         base = classpathItem.isFile() ? classpathItem.openZip() : classpathItem;
-        descriptor = resolver.resolve(base, METAINF_DESCRIPTOR);
-        properties = resolver.resolve(base, METAINF_PROPERTIES);
+        descriptor = resolver.resolve(base, MODULE_DESCRIPTOR);
+        properties = resolver.resolve(base, MODULE_PROPERTIES);
         loadLibrary(resolver, base, descriptor, properties);
     }
 
@@ -255,7 +255,7 @@ public class Repository {
     public void loadApplication(Resolver resolver, Node base, Node descriptor) throws IOException {
         Node properties;
 
-        properties = resolver.resolve(base, WEBINF_PROPERTIES);
+        properties = resolver.resolve(base, APPLICATION_PROPERTIES);
         loadLibrary(resolver, base, descriptor, properties);
     }
 
