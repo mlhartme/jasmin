@@ -131,13 +131,16 @@ public class References {
         }
     }
 
-    private void writeCssTo(Writer writer) throws IOException {
+    /** hook method */
+    protected void writeCssTo(Writer writer) throws IOException {
+        writeCssTo(writer, new Output(writer, overallMinimize));
+    }
+
+    protected void writeCssTo(Writer writer, Output output) throws IOException {
         Object[] results;
-        Output output;
         Mapper mapper;
         Node node;
 
-        output = new Output(writer, overallMinimize);
         mapper = SSASS.newInstance();
         mapper.setErrorHandler(new ExceptionErrorHandler());
         for (int i = 0; i < nodes.size(); i++) {
