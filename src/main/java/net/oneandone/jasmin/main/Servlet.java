@@ -98,15 +98,12 @@ public class Servlet extends HttpServlet {
             LOG.info("home: " + world.getHome());
             application = Application.load(world, config, docroot);
             LOG.info("docroot: " + docroot);
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | Error e) {
             error(null, "init", e);
             throw e;
         } catch (Exception e) {
             error(null, "init", e);
             throw new ServletException(e);
-        } catch (Error e) {
-            error(null, "init", e);
-            throw e;
         } catch (Throwable e) {
             error(null, "init", e);
             throw new RuntimeException("unexpected throwable", e);
@@ -220,15 +217,9 @@ public class Servlet extends HttpServlet {
         } catch (IOException e) {
             error(request, "getLastModified", e);
             // fall-through
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | Error e) {
             error(request, "getLastModified", e);
             throw e;
-        } catch (Error e) {
-            error(request, "getLastModified", e);
-            throw e;
-        } catch (Throwable e) {
-            error(request, "getLastModified", e);
-            throw new RuntimeException("unexpected throwable", e);
         }
         LOG.debug("getLastModified(" + request.getPathInfo() + ") -> " + result);
         return result;
@@ -250,15 +241,9 @@ public class Servlet extends HttpServlet {
                 error(request, "get", e);
             }
             throw e;
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | Error e) {
             error(request, "get", e);
             throw e;
-        } catch (Error e) {
-            error(request, "get", e);
-            throw e;
-        } catch (Throwable e) {
-            error(request, "get", e);
-            throw new RuntimeException("unexpected throwable", e);
         }
     }
 

@@ -131,15 +131,7 @@ public class Application {
             return new Object[] { new Engine(repository), reloadFiles };
         } catch (Throwable e) {
             resolver.reset();
-            if (e instanceof IOException) {
-                throw (IOException) e;
-            } else if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            } else if (e instanceof Error) {
-                throw (Error) e;
-            } else {
-                throw new IllegalStateException(e);
-            }
+            throw e;
         }
     }
 

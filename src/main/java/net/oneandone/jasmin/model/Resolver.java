@@ -105,9 +105,7 @@ public class Resolver {
     public Node resolve(Node root, String path) throws IOException {
         try {
             return doResolve(root, path);
-        } catch (IOException e) {
-            throw e;
-        } catch (RuntimeException e) {
+        } catch (IOException | RuntimeException e) {
             throw e;
         } catch (Exception e) {
             throw new IOException("LifeResolver failed", e);
