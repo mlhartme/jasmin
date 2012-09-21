@@ -382,15 +382,15 @@ public class Repository {
                         throw new UnsupportedOperationException(file.getNormal().getURI().toString());
                     }
                     Node tmp = resolver.getWorld().memoryNode();
-                    OutputStream dest = tmp.createOutputStream();
-                    for (String webservice : calls) {
-                        Call.call(attributes, webservice, dest);
-                        dest.write('\n');
+                    try (OutputStream dest = tmp.createOutputStream()) {
+                        for (String webservice : calls) {
+                            Call.call(attributes, webservice, dest);
+                            dest.write('\n');
+                        }
+                        try (InputStream orig = file.getNormal().createInputStream()) {
+                            resolver.getWorld().getBuffer().copy(orig, dest);
+                        }
                     }
-                    InputStream orig = file.getNormal().createInputStream();
-                    resolver.getWorld().getBuffer().copy(orig, dest);
-                    orig.close();
-                    dest.close();
                     file = new File(tmp, null, file.getType(), file.getVariant());
                 }
                 module.files().add(file);

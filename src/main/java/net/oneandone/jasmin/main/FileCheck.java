@@ -164,7 +164,6 @@ public class FileCheck {
         Node src;
         Node dest;
         long started;
-        Writer writer;
 
         for (Module module : repository.modules()) {
             for (File file : module.files()) {
@@ -175,9 +174,9 @@ public class FileCheck {
                         dest = world.getTemp().createTempFile();
                         LOG.info("fileCheck module=" + module.getName() + ", file=" + src);
                         started = System.currentTimeMillis();
-                        writer = dest.createWriter();
-                        References.create(file.getType(), true, src).writeTo(writer);
-                        writer.close();
+                        try (Writer writer = dest.createWriter()) {
+                            References.create(file.getType(), true, src).writeTo(writer);
+                        }
                         LOG.info("done, " + (System.currentTimeMillis() - started) + " ms");
                         dest.deleteFile();
                     } catch (Exception e) {

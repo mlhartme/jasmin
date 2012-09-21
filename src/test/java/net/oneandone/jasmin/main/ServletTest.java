@@ -75,20 +75,20 @@ public class ServletTest {
     public static void main(String[] args) throws Exception {
         World world;
         Node node;
-        Reader reader;
         int c;
-        int count = 0;
+        int count;
 
         world = new World();
         node = world.node("http://dsl.1und1.de/xml/jasmin/get/111004-1208/prefix+dslorder-de+opener-detection+qx-clickmap+"
                 + "qx-backbutton+econda-tracking+nedstat-tracking+adition-retargeting/js-min/AC:O:def");
-        reader = node.createReader();
-        Thread.sleep(10000);
-        while ((c = reader.read()) != -1) {
-            count++;
-            System.out.print((char) c);
+        try (Reader reader = node.createReader()) {
+            count = 0;
+            Thread.sleep(10000);
+            while ((c = reader.read()) != -1) {
+                count++;
+                System.out.print((char) c);
+            }
+            System.out.println("count: " + count);
         }
-        System.out.println("count: " + count);
-        reader.close();
     }
 }

@@ -85,17 +85,16 @@ public class ReferencesTest {
 
     private String minimize(MimeType type, String ... sources) throws IOException {
         Node dest;
-        Writer writer;
         References references;
 
         dest = world.memoryNode();
-        writer = dest.createWriter();
-        references = new References(type, true);
-        for (String source : sources) {
-            references.add(true, world.memoryNode(source));
+        try (Writer writer = dest.createWriter()) {
+            references = new References(type, true);
+            for (String source : sources) {
+                references.add(true, world.memoryNode(source));
+            }
+            references.writeTo(writer);
         }
-        references.writeTo(writer);
-        writer.close();
         return dest.readString();
     }
 }

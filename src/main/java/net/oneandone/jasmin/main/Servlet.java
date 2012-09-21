@@ -488,14 +488,12 @@ public class Servlet extends HttpServlet {
     }
 
     private void repository(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        Writer writer;
         JSONWriter dest;
         List<Module> modules;
 
         response.setContentType("application/json");
-        writer = response.getWriter();
-        dest = new JSONWriter(writer);
-        try {
+        try (Writer writer = response.getWriter()) {
+            dest = new JSONWriter(writer);
             dest.array();
             modules = new ArrayList<Module>(engine.repository.modules());
             Collections.sort(modules, new Comparator<Module>() {
@@ -516,7 +514,6 @@ public class Servlet extends HttpServlet {
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
-        writer.close();
     }
 
     private void hashCache(HttpServletResponse response) throws IOException {
@@ -529,7 +526,6 @@ public class Servlet extends HttpServlet {
 
 
     private void module(HttpServletRequest request, HttpServletResponse response, String name) throws IOException {
-        Writer writer;
         JSONWriter dest;
         Module module;
         Source source;
@@ -541,9 +537,8 @@ public class Servlet extends HttpServlet {
             return;
         }
         response.setContentType("application/json");
-        writer = response.getWriter();
-        dest = new JSONWriter(writer);
-        try {
+        try (Writer writer = response.getWriter()) {
+            dest = new JSONWriter(writer);
             dest.object();
             dest.key("name");
             dest.value(module.getName());
@@ -585,7 +580,6 @@ public class Servlet extends HttpServlet {
         } catch (JSONException e) {
             throw new IllegalStateException(e);
         }
-        writer.close();
     }
 
     private void reload(HttpServletResponse response) throws IOException {
@@ -607,29 +601,25 @@ public class Servlet extends HttpServlet {
     }
 
     private void text(HttpServletResponse response, String... lines) throws IOException {
-        Writer writer;
-
         response.setContentType("text/plain");
-        writer = response.getWriter();
-        for (String line : lines) {
-            writer.write(line);
-            writer.write('\n');
+        try (Writer writer = response.getWriter()) {
+            for (String line : lines) {
+                writer.write(line);
+                writer.write('\n');
+            }
         }
-        writer.close();
     }
 
     private void html(HttpServletResponse response, String... lines) throws IOException {
-        Writer writer;
-
         response.setContentType("text/html");
-        writer = response.getWriter();
-        writer.write("<html><header></header><body>\n");
-        for (String line : lines) {
-            writer.write(line);
-            writer.write('\n');
+        try (Writer writer = response.getWriter()) {
+            writer.write("<html><header></header><body>\n");
+            for (String line : lines) {
+                writer.write(line);
+                writer.write('\n');
+            }
+            writer.write("</body>");
         }
-        writer.write("</body>");
-        writer.close();
     }
 
     private void notFound(HttpServletRequest request, HttpServletResponse response) throws IOException {

@@ -28,7 +28,6 @@ public class Source {
     private static final Logger LOG = Logger.getLogger(Source.class);
 
     public static Source load(Node properties, Node base) throws IOException {
-        Reader src;
         Properties p;
         String groupId;
         String artifactId;
@@ -36,10 +35,10 @@ public class Source {
         String scm;
 
         properties.checkExists();
-        src = properties.createReader();
-        p = new Properties();
-        p.load(src);
-        src.close();
+        try (Reader src = properties.createReader()) {
+            p = new Properties();
+            p.load(src);
+        }
         groupId = get(p, "groupId");
         artifactId = get(p, "artifactId");
         version = get(p, "version");

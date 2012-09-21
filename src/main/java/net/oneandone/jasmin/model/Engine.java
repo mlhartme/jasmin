@@ -56,7 +56,6 @@ public class Engine {
     public int process(String path, HttpServletResponse response, boolean gzip) throws IOException {
         Content content;
         byte[] bytes;
-        Writer writer;
 
         try {
             content = doProcess(path);
@@ -64,9 +63,9 @@ public class Engine {
             Servlet.LOG.error("process failed: " + e.getMessage(), e);
             response.setStatus(500);
             response.setContentType("text/html");
-            writer = response.getWriter();
-            writer.write("<html><body><h1>" + e.getMessage() + "</h1></body></html>");
-            writer.close();
+            try (Writer writer = response.getWriter()) {
+                writer.write("<html><body><h1>" + e.getMessage() + "</h1></body></html>");
+            }
             return -1;
         }
         if (gzip) {
@@ -124,8 +123,6 @@ public class Engine {
         String hash;
         Content content;
         ByteArrayOutputStream result;
-        OutputStream dest;
-        Writer writer;
         References references;
         byte[] bytes;
 
@@ -145,10 +142,10 @@ public class Engine {
             throw new IOException(path + ": " + e.getMessage(), e);
         }
         result = new ByteArrayOutputStream(); // TODO: pool!
-        dest = new GZIPOutputStream(result);
-        writer = new OutputStreamWriter(dest);
-        references.writeTo(writer);
-        writer.close();
+        try (OutputStream dest = new GZIPOutputStream(result);
+             Writer writer = new OutputStreamWriter(dest)) {
+            references.writeTo(writer);
+        }
         bytes = result.toByteArray();
         endContent = System.currentTimeMillis();
         hash = hash(bytes);
