@@ -64,7 +64,10 @@ public class Engine {
             response.setStatus(500);
             response.setContentType("text/html");
             try (Writer writer = response.getWriter()) {
-                writer.write("<html><body><h1>" + e.getMessage() + "</h1></body></html>");
+                writer.write("<html><body><h1>" + e.getMessage() + "</h1>");
+                writer.write("<details><br/>");
+                printException(e, writer);
+                writer.write("</body></html>");
             }
             return -1;
         }
@@ -84,6 +87,20 @@ public class Engine {
         }
         response.getOutputStream().write(bytes);
         return bytes.length;
+    }
+
+    private void printException(Throwable e, Writer writer) throws IOException {
+        writer.write("type: " + e.getClass() + "<br/>\n");
+        writer.write("message: " + e.getMessage() + "<br/>\n");
+        for (StackTraceElement element : e.getStackTrace()) {
+            writer.write("  " + element.toString() + "<br/>\n");
+        }
+        if (e.getCause() != null && e.getCause() != e) {
+            writer.write("<br/>\n");
+            writer.write("... cause by ... <br/>\n");
+            writer.write("<br/>\n");
+            printException(e.getCause(), writer);
+        }
     }
 
     /** Convenience method for testing */

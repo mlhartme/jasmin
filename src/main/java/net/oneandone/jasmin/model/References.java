@@ -32,6 +32,7 @@ import net.oneandone.ssass.scss.Stylesheet;
 import net.oneandone.sushi.fs.GetLastModifiedException;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
+import net.oneandone.sushi.fs.webdav.WebdavNode;
 import net.oneandone.sushi.fs.zip.ZipNode;
 
 import java.io.IOException;
@@ -232,6 +233,8 @@ public class References {
             return "zip:" + name + "/" + node.getPath();
         } else if (node instanceof FileNode) {
             return "file:" + node.getRelative(node.getWorld().getWorking());
+        } else if (node instanceof WebdavNode) {
+            return "http:" + node.getName() + ((WebdavNode) node).getQuery();
         } else {
             return node.getName();
         }
