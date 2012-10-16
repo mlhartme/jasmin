@@ -98,14 +98,18 @@ public class References {
         List<SourceFile> sources;
         Result result;
         boolean first;
+        int i;
+        Node node;
 
         compiler = new Compiler(new LoggerErrorManager());
         options = new CompilerOptions();
         options.setOutputCharset("utf-8");
         sources = new ArrayList<>();
         externals = new ArrayList<>();
-        for (Node node : nodes) {
-            sources.add(SourceFile.fromCode(location(node), node.readString()));
+        for (i = 0; i < nodes.size(); i++) {
+            node = nodes.get(i);
+            sources.add(SourceFile.fromCode(location(node)
+                    + /* to get unique names, which is checked by the compiler: */ "_" + i, node.readString()));
         }
         result = compiler.compile(externals, sources, options);
         if (!result.success) {
@@ -180,11 +184,15 @@ public class References {
     public long getLastModified() throws GetLastModifiedException {
         long result;
 
-        result = Long.MIN_VALUE; // will never be return because there's at least one node
+        result = Long.MIN_VALUE;
         for (Node node : nodes) {
-            result = Math.max(result , node.getLastModified());
+            if (node instanceof WebdavNode) {
+                // skip getLastModified - it's not supported by Webservice Stub Servlet
+            } else {
+                result = Math.max(result , node.getLastModified());
+            }
         }
-        return result;
+        return result == Long.MIN_VALUE ? -1 : result;
     }
 
     //--
