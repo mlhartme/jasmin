@@ -180,7 +180,7 @@ public class References {
         return readString().getBytes("utf-8");
     }
 
-    /* @return -1 for when unknown */
+    /* @return -1 for unknown */
     public long getLastModified() throws GetLastModifiedException {
         long result;
 
