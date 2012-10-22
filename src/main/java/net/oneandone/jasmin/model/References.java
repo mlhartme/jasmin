@@ -29,6 +29,7 @@ import net.oneandone.mork.mapping.Mapper;
 import net.oneandone.mork.misc.GenericException;
 import net.oneandone.ssass.scss.Output;
 import net.oneandone.ssass.scss.Stylesheet;
+import net.oneandone.sushi.fs.CreateInputStreamException;
 import net.oneandone.sushi.fs.GetLastModifiedException;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
@@ -109,7 +110,7 @@ public class References {
         for (i = 0; i < nodes.size(); i++) {
             node = nodes.get(i);
             sources.add(SourceFile.fromCode(location(node)
-                    + /* to get unique names, which is checked by the compiler: */ "_" + i, node.readString()));
+                    + /* to get unique names, which is checked by the compiler: */ "_" + i, readString(node)));
         }
         result = compiler.compile(externals, sources, options);
         if (!result.success) {
@@ -133,6 +134,22 @@ public class References {
                 }
                 writer.write(source.getCode());
             }
+        }
+    }
+
+    private static String readString(Node node) throws IOException {
+        try {
+            return node.readString();
+        } catch (CreateInputStreamException e) {
+            if ((e.getCause() instanceof org.apache.http.NoHttpResponseException) && (node instanceof WebdavNode)) {
+                try {
+                    return node.readString();
+                } catch (IOException e2) {
+                    e.addSuppressed(e2);
+                    throw e;
+                }
+            }
+            throw e;
         }
     }
 
