@@ -30,30 +30,24 @@
       <action date="2012-08-24" dev="mhm" type="update">
         Renamed com.oneandone.jasmin to net.oneandone.jasmin.
       </action>
-      <action date="2012-08-22" dev="mhm" type="update">
-        Update sushi 2.7 to 3.0.
-      </action>
       <action date="2012-08-22" dev="mhm" type="add">
         Added Sass processing for all css files. File extension remains .css - there is no .sass or .ssass extension.
       </action>
       <action date="2012-03-30" dev="mhm" type="add">
         Added "call" comments to replace base LOCALHOST.
       </action>
-      <action date="2012-03-30" dev="mhm" type="remove">
+      <action date="2012-03-30" dev="mhm" type="update">
         Base LOCALHOST issues a deprecated warning now.
       </action>
       <action date="2012-03-30" dev="mhm" type="remove">
-        Pustefix Repository Projects are no longer supported.
-        Base "PROJECT" and the parameters "project" and "projectDescriptor" have been removed.
-      </action>
-      <action date="2012-03-30" dev="mhm" type="update">
-        Updated yuicompressor 2.3.6 to 2.4.6.
+        Pustefix Repository Projects are no longer supported. Base "PROJECT" has been removed.
+        The parameters "project" and "projectDescriptor" have been removed.
       </action>
       <action date="2012-03-29" dev="mhm" type="update">
         Report error for libraries without wsd.properties.
       </action>
       <action date="2012-08-22" dev="mhm" type="update">
-        Update sushi 2.7 to 3.0.
+        Update sushi 2.7.0 to 2.8.1.
       </action>
     </release>
   </body>
