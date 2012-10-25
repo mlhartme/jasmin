@@ -148,6 +148,14 @@ scmConnection = ${project.scm.connection}
           <argLine>-XX:-UseSplitVerifier</argLine>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>com.github.github</groupId>
+        <artifactId>site-maven-plugin</artifactId>
+        <configuration>
+          <path>maven-site</path>
+        </configuration>
+      </plugin>
+
     </plugins>
   </build>
 
