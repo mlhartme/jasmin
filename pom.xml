@@ -152,6 +152,7 @@ scmConnection = ${project.scm.connection}
         <groupId>com.github.github</groupId>
         <artifactId>site-maven-plugin</artifactId>
         <configuration>
+          <merge>true</merge>
           <path>maven-site</path>
         </configuration>
       </plugin>
