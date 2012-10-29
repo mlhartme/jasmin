@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pmd version="4.3" timestamp="2012-10-25T15:35:11.066">
+<pmd version="4.3" timestamp="2012-10-29T09:04:57.517">
 <file name="/home/mhm/Projects/github/jasmin/src/main/java/net/oneandone/jasmin/main/Application.java">
 <violation beginline="57" endline="57" begincolumn="31" endcolumn="42" rule="AvoidThreadGroup" ruleset="Basic Rules" package="net.oneandone.jasmin.main" class="Application" method="file" externalInfoUrl="http://pmd.sourceforge.net/rules/basic.html#AvoidThreadGroup" priority="3">
 Avoid using java.lang.ThreadGroup; it is not thread safe
