@@ -19,7 +19,7 @@ import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
 import org.junit.Test;
 
-public class ConcurrentReferenceManualTest {
+public class ConcurrentReferenceTestManual {
     private static final World WORLD = new World();
     private References reference;
 
