@@ -30,6 +30,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.concurrent.CountDownLatch;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -39,11 +41,13 @@ public class Engine {
     public final Repository repository;
     public final HashCache hashCache;
     public final ContentCache contentCache;
+    private final HashMap<String, CountDownLatch> pending;
 
     public Engine(Repository repository) {
         this.repository = repository;
         this.hashCache = new HashCache(1000000);
         this.contentCache = new ContentCache(10000000);
+        this.pending = new HashMap<>();
     }
 
     /**
@@ -142,33 +146,59 @@ public class Engine {
         ByteArrayOutputStream result;
         References references;
         byte[] bytes;
+        CountDownLatch gate;
 
-        hash = hashCache.lookup(path);
-        if (hash != null) {
-            content = contentCache.lookup(hash);
-            if (content != null) {
-                return content;
+        while (true) {
+            hash = hashCache.lookup(path);
+            if (hash != null) {
+                content = contentCache.lookup(hash);
+                if (content != null) {
+                    return content;
+                }
+            }
+            synchronized (pending) {
+                gate = pending.get(path);
+                if (gate == null) {
+                    gate = new CountDownLatch(1);
+                    if (pending.put(path, gate) != null) {
+                        throw new IllegalStateException();
+                    }
+                    break;
+                }
+            }
+            try {
+                gate.await();
+            } catch (InterruptedException e) {
+                // continue
             }
         }
         startContent = System.currentTimeMillis();
         try {
-            references = repository.resolve(Request.parse(path));
-        } catch (CyclicDependency e) {
-            throw new RuntimeException(e.toString(), e);
-        } catch (IOException e) {
-            throw new IOException(path + ": " + e.getMessage(), e);
+            try {
+                references = repository.resolve(Request.parse(path));
+            } catch (CyclicDependency e) {
+                throw new RuntimeException(e.toString(), e);
+            } catch (IOException e) {
+                throw new IOException(path + ": " + e.getMessage(), e);
+            }
+            result = new ByteArrayOutputStream(); // TODO: pool!
+            try (OutputStream dest = new GZIPOutputStream(result); Writer writer = new OutputStreamWriter(dest)) {
+                references.writeTo(writer);
+            }
+            bytes = result.toByteArray();
+            endContent = System.currentTimeMillis();
+            hash = hash(bytes);
+            content = new Content(references.type.getMime(), references.getLastModified(), bytes);
+            hashCache.add(path, hash, endContent /* that's where hash computation starts */, 0 /* too small for meaningful measures */);
+            contentCache.add(hash, content, startContent, endContent - startContent);
+        } finally {
+            gate.countDown();
+            synchronized (pending) {
+                if (pending.remove(path) != gate) {
+                    throw new IllegalStateException();
+                }
+            }
         }
-        result = new ByteArrayOutputStream(); // TODO: pool!
-        try (OutputStream dest = new GZIPOutputStream(result);
-             Writer writer = new OutputStreamWriter(dest)) {
-            references.writeTo(writer);
-        }
-        bytes = result.toByteArray();
-        endContent = System.currentTimeMillis();
-        hash = hash(bytes);
-        content = new Content(references.type.getMime(), references.getLastModified(), bytes);
-        hashCache.add(path, hash, endContent /* that's where hash computation starts */, 0 /* too small for meaningful measures */);
-        contentCache.add(hash, content, startContent, endContent - startContent);
         return content;
     }
 

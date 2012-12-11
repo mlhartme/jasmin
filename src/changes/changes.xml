@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
+    <release date="2012-12-11" version="3.0.3">
+      <action date="2012-12-11" dev="mhm" type="update">
+        Avoid concurrent computation of the same path.
+      </action>
+    </release>
     <release date="2012-11-09" version="3.0.2">
       <action date="2012-11-09" dev="mhm" type="fix">
         Update dependencies to fix too-many-open-files problem.
