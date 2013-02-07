@@ -15,9 +15,9 @@
  */
 package net.oneandone.jasmin.model;
 
+import net.oneandone.graph.CyclicDependency;
 import net.oneandone.jasmin.main.Servlet;
 import net.oneandone.sushi.fs.GetLastModifiedException;
-import net.oneandone.sushi.graph.CyclicDependency;
 import net.oneandone.sushi.io.Buffer;
 import net.oneandone.sushi.util.Strings;
 

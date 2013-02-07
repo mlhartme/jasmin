@@ -15,8 +15,8 @@
  */
 package net.oneandone.jasmin.model;
 
+import net.oneandone.graph.CyclicDependency;
 import net.oneandone.sushi.fs.World;
-import net.oneandone.sushi.graph.CyclicDependency;
 import net.oneandone.sushi.util.Strings;
 import org.junit.Before;
 import org.junit.Test;

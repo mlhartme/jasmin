@@ -24,8 +24,8 @@ import net.oneandone.sushi.fs.filter.Filter;
 import net.oneandone.sushi.fs.memory.MemoryNode;
 import net.oneandone.sushi.fs.webdav.WebdavNode;
 import net.oneandone.sushi.fs.zip.ZipNode;
-import net.oneandone.sushi.graph.CyclicDependency;
-import net.oneandone.sushi.graph.Graph;
+import net.oneandone.graph.CyclicDependency;
+import net.oneandone.graph.Graph;
 import net.oneandone.sushi.util.Strings;
 import net.oneandone.sushi.util.Util;
 
