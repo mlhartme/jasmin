@@ -456,6 +456,7 @@ public class Servlet extends HttpServlet {
                 "<p>Jasmin Servlet " + getVersion() + "</p>",
                 "<p>Hostname: " + HOSTNAME + "</p>",
                 "<p>Docroot: " + docroot.getAbsolute() + "</p>",
+                "<p>Load: " + engine.load() + "</p>",
                 "<p>VM Startup: " + VM_STARTUP_STR + "</p>",
                 "<p>Other VM Startup: " + FMT.format(otherVmStartupDate) + "</p>",
                 "<p>Loaded: " + new Date(loaded) + "</p>",

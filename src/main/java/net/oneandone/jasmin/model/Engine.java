@@ -50,6 +50,10 @@ public class Engine {
         this.pending = new HashMap<>();
     }
 
+    public int load() {
+        return pending.size();
+    }
+
     /**
      * Output is prepared in-memory before the response is written because
      * a) that's the common case where output is cached. If output is to big for this, that whole caching doesn't work
@@ -163,15 +167,19 @@ public class Engine {
                     if (pending.put(path, gate) != null) {
                         throw new IllegalStateException();
                     }
+                    // we're the first to request this path -- compute it
                     break;
                 }
             }
             try {
+                // wait until other thread processing this path has finished the finally block below
                 gate.await();
             } catch (InterruptedException e) {
                 // continue
             }
+            // continue loop - content is either cached now or we try to re-compute it
         }
+
         startContent = System.currentTimeMillis();
         try {
             try {
@@ -192,8 +200,8 @@ public class Engine {
             hashCache.add(path, hash, endContent /* that's where hash computation starts */, 0 /* too small for meaningful measures */);
             contentCache.add(hash, content, startContent, endContent - startContent);
         } finally {
-            gate.countDown();
             synchronized (pending) {
+                gate.countDown();
                 if (pending.remove(path) != gate) {
                     throw new IllegalStateException();
                 }
