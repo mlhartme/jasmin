@@ -118,24 +118,28 @@
             <configuration>
               <target>
                 <mkdir dir="${project.build.directory}/classes/META-INF" />
-                <echo file="${project.build.directory}/classes/META-INF/wsd.properties">
+                <echo file="${project.build.directory}/classes/META-INF/pominfo.properties">
 groupId = ${project.groupId}
 artifactId = ${project.artifactId}
 version = ${project.version}
+packaging = jar
 name = ${project.name}
 url = ${project.url}
 site = ${project.distributionManagement.site.url}
 scmConnection = ${project.scm.connection}
+dependencies =
                  </echo>
                 <mkdir dir="${project.build.directory}/test-classes/META-INF" />
-                <echo file="${project.build.directory}/test-classes/META-INF/wsd.properties">
-                  groupId = ${project.groupId}
-                  artifactId = ${project.artifactId}
-                  version = ${project.version}
-                  name = ${project.name}
-                  url = ${project.url}
-                  site = ${project.distributionManagement.site.url}
-                  scmConnection = ${project.scm.connection}
+                <echo file="${project.build.directory}/test-classes/META-INF/pominfo.properties">
+groupId = ${project.groupId}
+artifactId = ${project.artifactId}
+version = ${project.version}
+packaging = jar
+name = ${project.name}
+url = ${project.url}
+site = ${project.distributionManagement.site.url}
+scmConnection = ${project.scm.connection}
+dependencies =
                 </echo>
               </target>
             </configuration>

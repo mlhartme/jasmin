@@ -53,10 +53,9 @@ public class Repository {
         return repository;
     }
 
+    public static final String PROJECT_PROPERTIES = "META-INF/pominfo.properties";
     public static final String MODULE_DESCRIPTOR = "META-INF/jasmin.xml";
-    public static final String MODULE_PROPERTIES = "META-INF/wsd.properties";
     public static final String APPLICATION_DESCRIPTOR = "WEB-INF/jasmin.xml";
-    public static final String APPLICATION_PROPERTIES = "WEB-INF/wsd.properties";
 
     //--
 
@@ -243,7 +242,7 @@ public class Repository {
         classpathItem = resolver.getWorld().locateClasspathItem(url, "/" + MODULE_DESCRIPTOR);
         base = classpathItem.isFile() ? classpathItem.openZip() : classpathItem;
         descriptor = resolver.resolve(base, MODULE_DESCRIPTOR);
-        properties = resolver.resolve(base, MODULE_PROPERTIES);
+        properties = resolver.resolve(base, PROJECT_PROPERTIES);
         loadLibrary(resolver, base, descriptor, properties);
     }
 
@@ -255,7 +254,7 @@ public class Repository {
     public void loadApplication(Resolver resolver, Node base, Node descriptor) throws IOException {
         Node properties;
 
-        properties = resolver.resolve(base, APPLICATION_PROPERTIES);
+        properties = resolver.resolve(base, PROJECT_PROPERTIES);
         loadLibrary(resolver, base, descriptor, properties);
     }
 
