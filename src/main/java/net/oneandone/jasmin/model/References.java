@@ -104,7 +104,7 @@ public class References {
 
         compiler = new Compiler(new LoggerErrorManager());
         options = new CompilerOptions();
-        options.setOutputCharset("utf-8");
+        options.setOutputCharset(Engine.ENCODING);
         sources = new ArrayList<>();
         externals = new ArrayList<>();
         for (i = 0; i < nodes.size(); i++) {
@@ -194,7 +194,7 @@ public class References {
     }
 
     public byte[] readBytes() throws IOException {
-        return readString().getBytes("utf-8");
+        return readString().getBytes(Engine.ENCODING);
     }
 
     /* @return -1 for unknown */

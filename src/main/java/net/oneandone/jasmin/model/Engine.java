@@ -36,7 +36,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class Engine {
-    private static final String UTF_8 = "utf-8";
+    public static final String ENCODING = "utf-8";
 
     public final Repository repository;
     public final HashCache hashCache;
@@ -93,7 +93,7 @@ public class Engine {
         }
         response.setBufferSize(0);
         response.setContentType(content.mimeType);
-        response.setCharacterEncoding(UTF_8); // TODO: inspect header - does this have an effect?
+        response.setCharacterEncoding(ENCODING); // TODO: inspect header - does this have an effect?
         if (content.lastModified != -1) {
             response.setDateHeader("Last-Modified", content.lastModified);
         }
@@ -120,7 +120,7 @@ public class Engine {
         Content content;
 
         content = doProcess(path);
-        return new String(unzip(content.bytes), UTF_8);
+        return new String(unzip(content.bytes), ENCODING);
     }
 
     /* @return -1 (i.e: unknown) when not cached; not computed */
@@ -199,8 +199,8 @@ public class Engine {
             } catch (IOException e) {
                 throw new IOException(path + ": " + e.getMessage(), e);
             }
-            result = new ByteArrayOutputStream(); // TODO: pool!
-            try (OutputStream dest = new GZIPOutputStream(result); Writer writer = new OutputStreamWriter(dest)) {
+            result = new ByteArrayOutputStream();
+            try (OutputStream dest = new GZIPOutputStream(result); Writer writer = new OutputStreamWriter(dest, ENCODING)) {
                 references.writeTo(writer);
             }
             bytes = result.toByteArray();

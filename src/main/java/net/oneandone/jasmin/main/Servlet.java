@@ -419,13 +419,13 @@ public class Servlet extends HttpServlet {
             return;
         }
         // I've seen both "utf-8" and "UTF-8" -> test case-insensitive
-        if (contains(accepts.toLowerCase(), "utf-8")) {
+        if (contains(accepts.toLowerCase(), Engine.ENCODING)) {
             return;
         }
         if (contains(accepts, "*")) {
             return;
         }
-        throw new IOException("utf-8 is not accepted: " + accepts);
+        throw new IOException(Engine.ENCODING + " encoding is not accepted: " + accepts);
     }
 
     // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html
