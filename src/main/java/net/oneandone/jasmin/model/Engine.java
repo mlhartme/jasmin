@@ -147,13 +147,8 @@ public class Engine {
 
     /** @return gzip compressed content */
     private Content doProcess(String path) throws IOException {
-        long startContent;
-        long endContent;
         String hash;
         Content content;
-        ByteArrayOutputStream result;
-        References references;
-        byte[] bytes;
         CountDownLatch gate;
 
         while (true) {
@@ -188,8 +183,22 @@ public class Engine {
             // continue loop - content is either cached now or we try to re-compute it
         }
 
-        // when we get here, we're the only thread computing this path - all others will be blocked by the above
-        // gate.await()
+        return doUniqueProcess(path, gate);
+    }
+
+    /** exactly one thread will invoke this method for one path */
+    private Content doUniqueProcess(String path, CountDownLatch gate) throws IOException {
+        long startContent;
+        long endContent;
+        ByteArrayOutputStream result;
+        References references;
+        byte[] bytes;
+        String hash;
+        Content content;
+
+        if (gate.getCount() != 1) {
+            throw new IllegalStateException(path + " " + gate.getCount());
+        }
         startContent = System.currentTimeMillis();
         try {
             try {
@@ -221,6 +230,7 @@ public class Engine {
             }
         }
         return content;
+
     }
 
     private static final MessageDigest DIGEST;
