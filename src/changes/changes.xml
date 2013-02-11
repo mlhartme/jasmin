@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
-    <release date="2012-12-11" version="3.0.3">
+    <release date="2013-02-12" version="3.0.3">
+      <action date="2013-02-12" dev="mhm" type="update">
+        Limit max number of parallel computations.
+      </action>
       <action date="2013-02-06" dev="mhm" type="update">
         Use pominfo.properties instead of wsd.properties.
       </action>
