@@ -40,7 +40,7 @@ public class Engine {
     public static final String ENCODING = "utf-8";
 
     public final Repository repository;
-    private final Semaphore processorSemaphore;
+    private final Semaphore computeSemaphore;
     public final HashCache hashCache;
     public final ContentCache contentCache;
     private final HashMap<String, CountDownLatch> pending;
@@ -49,9 +49,9 @@ public class Engine {
         this(repository, 8, 1000000, 10000000);
     }
 
-    public Engine(Repository repository, int maxProcessors, int hashSize, int contentSize) {
+    public Engine(Repository repository, int maxComputeThreads, int hashSize, int contentSize) {
         this.repository = repository;
-        this.processorSemaphore = new Semaphore(maxProcessors);
+        this.computeSemaphore = new Semaphore(maxComputeThreads);
         this.hashCache = new HashCache(hashSize);
         this.contentCache = new ContentCache(contentSize);
         this.pending = new HashMap<>();
@@ -69,14 +69,14 @@ public class Engine {
      * c) I can return the number of bytes actually written
      * @return bytes written or -1 if building the module content failed.
      */
-    public int process(String path, HttpServletResponse response, boolean gzip) throws IOException {
+    public int request(String path, HttpServletResponse response, boolean gzip) throws IOException {
         Content content;
         byte[] bytes;
 
         try {
-            content = doProcess(path);
+            content = doRequest(path);
         } catch (IOException e) {
-            Servlet.LOG.error("process failed: " + e.getMessage(), e);
+            Servlet.LOG.error("request failed: " + e.getMessage(), e);
             response.setStatus(500);
             response.setContentType("text/html");
             try (Writer writer = response.getWriter()) {
@@ -120,10 +120,10 @@ public class Engine {
     }
 
     /** Convenience method for testing */
-    public String process(String path) throws IOException {
+    public String request(String path) throws IOException {
         Content content;
 
-        content = doProcess(path);
+        content = doRequest(path);
         return new String(unzip(content.bytes), ENCODING);
     }
 
@@ -150,7 +150,7 @@ public class Engine {
     //--
 
     /** @return gzip compressed content */
-    private Content doProcess(String path) throws IOException {
+    private Content doRequest(String path) throws IOException {
         String hash;
         Content content;
         CountDownLatch gate;
@@ -179,7 +179,7 @@ public class Engine {
                 }
             }
             try {
-                // wait until other thread processing this path has finished the finally block below
+                // wait until the thread that's computing this path has finished
                 gate.await();
             } catch (InterruptedException e) {
                 // continue
@@ -187,20 +187,24 @@ public class Engine {
             // continue loop - content is either cached now or we try to re-compute it
         }
 
+        return doCompute(path, gate);
+    }
+
+    private Content doCompute(String path, CountDownLatch gate) throws IOException {
         try {
-            processorSemaphore.acquire();
+            computeSemaphore.acquire();
         } catch (InterruptedException e) {
             throw new IllegalStateException(e);
         }
         try {
-            return doUniqueProcess(path, gate);
+            return doComputeUnlimited(path, gate);
         } finally {
-            processorSemaphore.release();
+            computeSemaphore.release();
         }
     }
 
     /** exactly one thread will invoke this method for one path */
-    private Content doUniqueProcess(String path, CountDownLatch gate) throws IOException {
+    private Content doComputeUnlimited(String path, CountDownLatch gate) throws IOException {
         long startContent;
         long endContent;
         ByteArrayOutputStream result;

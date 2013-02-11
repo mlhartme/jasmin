@@ -91,7 +91,7 @@ public class ConcurrentEngineTest {
         public void run() {
             for (int j = 0; j < repeat; j++) {
                 try {
-                    assertEquals("", engine.process("js/foo"));
+                    assertEquals("", engine.request("js/foo"));
                 } catch (Exception e) {
                     exception = e;
                     return;

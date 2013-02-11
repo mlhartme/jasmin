@@ -351,7 +351,7 @@ public class Servlet extends HttpServlet {
             response.addHeader("Cache-Control", "max-age=" + application.expires);
         }
         gzip = canGzip(request);
-        bytes = engine.process(path, response, gzip);
+        bytes = engine.request(path, response, gzip);
         duration = System.currentTimeMillis() - started;
         LOG.info(path + "|" + bytes + "|" + duration + "|" + gzip + "|" + referer(request));
     }

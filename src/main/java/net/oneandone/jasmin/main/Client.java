@@ -72,7 +72,7 @@ public class Client extends Thread {
 
         started = System.currentTimeMillis();
         try {
-            str = engine.process(path);
+            str = engine.request(path);
             Runner.LOG.info(path + ": " + str.length() + " chars, " + (System.currentTimeMillis() - started) + " ms");
         } catch (IOException e) {
             Runner.LOG.error(path, e);
