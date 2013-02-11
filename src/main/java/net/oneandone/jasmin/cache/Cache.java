@@ -68,7 +68,7 @@ public abstract class Cache<K, V> {
         Item<V> item;
         Item<V> concurrent;
 
-        item = new Item<V>(value, created, duration);
+        item = new Item<>(value, created, duration);
         concurrent = items.put(key, item);
         if (concurrent != null) {
             size -= valueSize(concurrent.value);
