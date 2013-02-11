@@ -32,6 +32,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -39,21 +40,24 @@ public class Engine {
     public static final String ENCODING = "utf-8";
 
     public final Repository repository;
+    private final Semaphore processorSemaphore;
     public final HashCache hashCache;
     public final ContentCache contentCache;
     private final HashMap<String, CountDownLatch> pending;
 
     public Engine(Repository repository) {
-        this(repository, 1000000, 10000000);
+        this(repository, 8, 1000000, 10000000);
     }
 
-    public Engine(Repository repository, int hashSize, int contentSize) {
+    public Engine(Repository repository, int maxProcessors, int hashSize, int contentSize) {
         this.repository = repository;
+        this.processorSemaphore = new Semaphore(maxProcessors);
         this.hashCache = new HashCache(hashSize);
         this.contentCache = new ContentCache(contentSize);
         this.pending = new HashMap<>();
     }
 
+    /** number of threads that could compute a unique path */
     public int load() {
         return pending.size();
     }
@@ -183,7 +187,16 @@ public class Engine {
             // continue loop - content is either cached now or we try to re-compute it
         }
 
-        return doUniqueProcess(path, gate);
+        try {
+            processorSemaphore.acquire();
+        } catch (InterruptedException e) {
+            throw new IllegalStateException(e);
+        }
+        try {
+            return doUniqueProcess(path, gate);
+        } finally {
+            processorSemaphore.release();
+        }
     }
 
     /** exactly one thread will invoke this method for one path */

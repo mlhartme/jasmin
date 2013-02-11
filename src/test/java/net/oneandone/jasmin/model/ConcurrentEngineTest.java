@@ -27,7 +27,7 @@ public class ConcurrentEngineTest {
 
         repository = new Repository();
         repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
-        engine = new Engine(repository, 100, 100);
+        engine = new Engine(repository, 15, 100, 100);
         parallel(engine, 2, 1000);
         parallel(engine, 3, 997);
         parallel(engine, 7, 997);
@@ -41,7 +41,21 @@ public class ConcurrentEngineTest {
 
         repository = new Repository();
         repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
-        engine = new Engine(repository, 0, 0);
+        engine = new Engine(repository, 15, 0, 0);
+        parallel(engine, 2, 1000);
+        parallel(engine, 3, 997);
+        parallel(engine, 7, 997);
+        parallel(engine, 13, 997);
+    }
+
+    @Test
+    public void trashingWithOneProcessor() throws Exception {
+        Repository repository;
+        Engine engine;
+
+        repository = new Repository();
+        repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
+        engine = new Engine(repository, 1, 0, 0);
         parallel(engine, 2, 1000);
         parallel(engine, 3, 997);
         parallel(engine, 7, 997);
