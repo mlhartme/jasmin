@@ -28,6 +28,8 @@ public abstract class Cache<K, V> {
     private int size;
     private int lookups;
     private int misses;
+    private long addedBytes;
+    private long removedBytes;
 
     public Cache(int maxSize) {
         this.items = new LinkedHashMap<>(16, 0.75f, true);
@@ -65,6 +67,7 @@ public abstract class Cache<K, V> {
     }
 
     public synchronized void add(K key, V value, long created, long duration) {
+        int valueSize;
         Item<V> item;
         Item<V> concurrent;
 
@@ -73,10 +76,12 @@ public abstract class Cache<K, V> {
         if (concurrent != null) {
             size -= valueSize(concurrent.value);
         }
-        size += valueSize(item.value);
+        valueSize = valueSize(item.value);
+        size += valueSize;
+        addedBytes += valueSize;
         item.accessTime = created;
         item.accessCount++;
-        doResize(maxSize);
+        shrink(maxSize);
     }
 
     /** lookup without stats */
@@ -88,18 +93,21 @@ public abstract class Cache<K, V> {
     }
 
     public synchronized void resize(int max) {
-        doResize(max);
+        shrink(max);
     }
 
-    private void doResize(int max) {
+    private void shrink(int max) {
         Iterator<Map.Entry<K, Item<V>>> iter;
         Item<V> item;
+        int valueSize;
 
         if (size > max) {
             iter = items.entrySet().iterator();
             while (iter.hasNext()) {
                 item = iter.next().getValue();
-                size -= valueSize(item.value);
+                valueSize = valueSize(item.value);
+                removedBytes += valueSize;
+                size -= valueSize;
                 iter.remove();
                 if (size <= max) {
                     break;
@@ -130,6 +138,14 @@ public abstract class Cache<K, V> {
 
     public synchronized int gets() {
         return lookups;
+    }
+
+    public synchronized long addedBytes() {
+        return addedBytes;
+    }
+
+    public synchronized long removedBytes() {
+        return removedBytes;
     }
 
     public synchronized void validate() {

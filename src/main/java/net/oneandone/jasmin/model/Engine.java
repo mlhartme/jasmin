@@ -33,6 +33,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -45,6 +46,9 @@ public class Engine {
     public final ContentCache contentCache;
     private final HashMap<String, CountDownLatch> pending;
 
+    /** of compressed content */
+    public AtomicLong requestedBytes;
+
     public Engine(Repository repository) {
         this(repository, 8, 1000000, 10000000);
     }
@@ -55,11 +59,23 @@ public class Engine {
         this.hashCache = new HashCache(hashSize);
         this.contentCache = new ContentCache(contentSize);
         this.pending = new HashMap<>();
+        this.requestedBytes = new AtomicLong();
     }
 
     /** number of threads that could compute a unique path */
     public int load() {
         return pending.size();
+    }
+
+    public long requestedBytes() {
+        return requestedBytes.get();
+    }
+    public long computedBytes() {
+        return contentCache.addedBytes();
+    }
+
+    public long removedBytes() {
+        return contentCache.removedBytes();
     }
 
     /**
@@ -149,8 +165,17 @@ public class Engine {
 
     //--
 
-    /** @return gzip compressed content */
     private Content doRequest(String path) throws IOException {
+        Content result;
+
+        result = doRequestNoStats(path);
+        requestedBytes.addAndGet(result.bytes.length);
+        return result;
+    }
+
+    /** @return gzip compressed content */
+    private Content doRequestNoStats(String path) throws IOException {
+        AtomicLong l;
         String hash;
         Content content;
         CountDownLatch gate;
@@ -170,7 +195,7 @@ public class Engine {
                     if (pending.put(path, gate) != null) {
                         throw new IllegalStateException();
                     }
-                    // we're the first to request this path -- compute it
+                    // we're the first thread to request this path -- compute it
                     break;
                 } else {
                     if (gate.getCount() != 1) {
