@@ -44,9 +44,13 @@ public class Engine {
     private final HashMap<String, CountDownLatch> pending;
 
     public Engine(Repository repository) {
+        this(repository, 1000000, 10000000);
+    }
+
+    public Engine(Repository repository, int hashSize, int contentSize) {
         this.repository = repository;
-        this.hashCache = new HashCache(1000000);
-        this.contentCache = new ContentCache(10000000);
+        this.hashCache = new HashCache(hashSize);
+        this.contentCache = new ContentCache(contentSize);
         this.pending = new HashMap<>();
     }
 
@@ -169,6 +173,10 @@ public class Engine {
                     }
                     // we're the first to request this path -- compute it
                     break;
+                } else {
+                    if (gate.getCount() != 1) {
+                        throw new IllegalStateException(path + " " + gate.getCount());
+                    }
                 }
             }
             try {
@@ -180,6 +188,8 @@ public class Engine {
             // continue loop - content is either cached now or we try to re-compute it
         }
 
+        // when we get here, we're the only thread computing this path - all others will be blocked by the above
+        // gate.await()
         startContent = System.currentTimeMillis();
         try {
             try {
@@ -201,10 +211,13 @@ public class Engine {
             contentCache.add(hash, content, startContent, endContent - startContent);
         } finally {
             synchronized (pending) {
-                gate.countDown();
+                if (gate.getCount() != 1) {
+                    throw new IllegalStateException(path + " " + gate.getCount());
+                }
                 if (pending.remove(path) != gate) {
                     throw new IllegalStateException();
                 }
+                gate.countDown();
             }
         }
         return content;
