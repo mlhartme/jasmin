@@ -53,6 +53,7 @@ public class Repository {
         return repository;
     }
 
+    // where in the classes of a module or an application ...
     public static final String PROJECT_PROPERTIES = "META-INF/pominfo.properties";
     public static final String MODULE_DESCRIPTOR = "META-INF/jasmin.xml";
     public static final String APPLICATION_DESCRIPTOR = "WEB-INF/jasmin.xml";
@@ -249,12 +250,12 @@ public class Repository {
     /**
      * An application is not a classpath item because jasmin.xml is from WEB-INF, it's not a resource.
      * I don't want to make it a resource (by moving WEB-INF/jasmin.xml to META-INF/jasmin.xml) because
-     * all other config files reside in WEB-INF, and webapps usually have no META-INF directory at all.
+     * all other config files reside in WEB-INF. Some webapps have no META-INF directory at all.
      */
     public void loadApplication(Resolver resolver, Node base, Node descriptor) throws IOException {
         Node properties;
 
-        properties = resolver.resolve(base, PROJECT_PROPERTIES);
+        properties = resolver.resolve(base, "WEB-INF/classes/" + PROJECT_PROPERTIES);
         loadLibrary(resolver, base, descriptor, properties);
     }
 
