@@ -16,8 +16,6 @@
 package net.oneandone.jasmin.model;
 
 import net.oneandone.sushi.fs.Node;
-import net.oneandone.sushi.util.Strings;
-import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -25,8 +23,6 @@ import java.util.Properties;
 
 /** Per-classpath item info. */
 public class Source {
-    private static final Logger LOG = Logger.getLogger(Source.class);
-
     public static Source load(Node properties, Node base) throws IOException {
         Properties p;
         String groupId;

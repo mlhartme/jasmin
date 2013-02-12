@@ -252,14 +252,22 @@ public class Repository {
      * I don't want to make it a resource (by moving WEB-INF/jasmin.xml to META-INF/jasmin.xml) because
      * all other config files reside in WEB-INF. Some webapps have no META-INF directory at all.
      */
-    public void loadApplication(Resolver resolver, Node base, Node descriptor) throws IOException {
+    public void loadApplication(Resolver resolver, Node docroot, Node descriptor) throws IOException {
         Node properties;
 
-        properties = resolver.resolve(base, "WEB-INF/classes/" + PROJECT_PROPERTIES);
-        loadLibrary(resolver, base, descriptor, properties);
+        // pws removes WEB-INF classes and uses target/classes instead ...
+        properties = docroot.getParent().join("classes", PROJECT_PROPERTIES);
+        System.out.println("check:" + properties + " " + properties.isFile()    );
+        if (!properties.isFile()) {
+            properties = docroot.join("WEB-INF/classes", PROJECT_PROPERTIES);
+        }
+        loadLibrary(resolver, docroot, descriptor, properties);
     }
 
-    /** Core method for loading. A library is a module or an application */
+    /**
+     * Core method for loading. A library is a module or an application
+     * @param base jar file for module, docroot for application
+     */
     public void loadLibrary(Resolver resolver, Node base, Node descriptor, Node properties) throws IOException {
         Source source;
         Module module;
