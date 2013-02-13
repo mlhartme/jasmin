@@ -42,7 +42,7 @@ public class Resolver {
     public Resolver(World world, boolean live) {
         this.world = world;
         this.live = live ? new LiveResolver() : null;
-        this.bases = new HashMap<Base, Node>();
+        this.bases = new HashMap<>();
     }
 
     public World getWorld() {
