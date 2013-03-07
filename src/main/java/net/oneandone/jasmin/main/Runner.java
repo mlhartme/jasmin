@@ -41,7 +41,7 @@ public class Runner {
         Engine engine;
 
         base = world.guessProjectHome(Runner.class);
-        application = new Application(null, new Resolver(world, true), null, null);
+        application = new Application(null, new Resolver(world), null, null);
         localhost = world.getTemp().createTempDirectory();
         engine = application.createEngineSimple(base.getParent(), localhost);
         return new Runner(name, engine);
