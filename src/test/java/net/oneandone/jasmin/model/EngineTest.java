@@ -33,7 +33,7 @@ public class EngineTest {
         Resolver resolver;
 
         world = new World();
-        resolver = new Resolver(world, true);
+        resolver = new Resolver(world, false);
         resolver.add(Base.CLASSPATH, world.guessProjectHome(EngineTest.class).join("src/test/resources"));
         engine = new Engine(Repository.load(resolver));
     }
