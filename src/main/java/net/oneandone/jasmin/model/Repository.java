@@ -436,6 +436,7 @@ public class Repository {
 
             path = node.getRelative(source.classpathBase);
             module = path;
+            module = Strings.removeLeftOpt(module, "PUSTEFIX-INF/");
             module = Strings.removeLeftOpt(module, "script/");
             module = Strings.removeLeftOpt(module, "style/");
             idx = module.lastIndexOf('.');
