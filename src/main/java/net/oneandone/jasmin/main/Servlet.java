@@ -151,8 +151,7 @@ public class Servlet extends HttpServlet {
         if (engine == null) {
             url = new URL(request.getRequestURL().toString());
             try {
-                // always use http, avoid https
-                localhost = resolver.getWorld().node(new URI("http", null, url.getHost(), url.getPort(), "", null, null));
+                localhost = resolver.getWorld().node(new URI(url.getProtocol(), null, url.getHost(), url.getPort(), "", null, null));
             } catch (URISyntaxException e) {
                 throw new IllegalStateException(e);
             }
