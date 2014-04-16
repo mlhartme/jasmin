@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
-    <release version="3.0.4">
+    <release date="2013-04-16" version="3.0.4">
+      <action date="2014-04-16" dev="ffray" type="fix">
+        Fix services requests: use the protocol specified by initial request (instead of always http).
+      </action>
+    </release>
+    <release date="2014-03-07" version="3.0.4">
       <action date="2014-03-07" dev="mhm" type="update">
         More path prefixes removed from implicit module names: pustefix and htdocs.
       </action>
