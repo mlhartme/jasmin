@@ -147,13 +147,11 @@ public class FileCheck {
         repository = new Repository();
         repository.loadClasspath(resolver);
         descriptor = application.join("conf/jasmin.xml");
-        if (!descriptor.exists()) {
-            descriptor = application.join("WEB-INF/jasmin.xml");
-            if (!descriptor.exists()) {
-                descriptor = null;
-            }
+        if (descriptor.exists()) {
+            throw new IllegalStateException("unexpected location for descriptor: " + descriptor);
         }
-        if (descriptor != null) {
+        descriptor = application.join(Repository.APPLICATION_DESCRIPTOR);
+        if (descriptor.exists()) {
             repository.loadApplication(resolver, application, descriptor);
         }
         repository.link();
