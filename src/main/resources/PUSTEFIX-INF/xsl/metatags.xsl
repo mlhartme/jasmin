@@ -9,7 +9,7 @@
   xmlns:jasmin="java:net.oneandone.jasmin.main.Servlet"
   exclude-result-prefixes="cxs">
 
-  <xsl:template match="shop:load-jasmin-modules">
+  <xsl:template match="shop:load-jasmin-modules" name="shop:load-jasmin-modules">
 
     <xsl:param name="min" select="@min" />
     <xsl:param name="restrict-to" select="@restrict-to" />
