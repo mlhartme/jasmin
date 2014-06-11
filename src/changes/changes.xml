@@ -3,6 +3,9 @@
   <body>
     <release date="2014-06-11" version="3.0.6">
       <action date="2014-06-11" dev="mhm" type="update">
+        Update sushi 2.8.7 to 2.8.14.
+      </action>
+      <action date="2014-06-11" dev="mhm" type="update">
         Allow caching on proxies. 
       </action>
       <action date="2014-06-11" dev="mhm" type="update">
