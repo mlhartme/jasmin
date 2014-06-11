@@ -367,48 +367,9 @@ public class Servlet extends HttpServlet {
 
     private static boolean canGzip(HttpServletRequest request) {
         String accepted;
-        String userAgent;
 
         accepted = request.getHeader("Accept-Encoding");
-        if (accepted == null) {
-            return false;
-        }
-        if (!contains(accepted, "gzip")) {
-            return false;
-        }
-        userAgent = request.getHeader("User-Agent");
-        if (userAgent == null) {
-            LOG.info("unknown user-agent");
-            return false;
-        }
-        if (blacklisted(userAgent)) {
-            LOG.info("user-agent blacklisted: " + userAgent);
-            return false;
-        }
-        return true;
-    }
-
-    // see http://msdn.microsoft.com/en-us/repository/ms537503(VS.85).aspx
-    private static final Pattern MSIE = Pattern.compile("Mozilla/4.0 \\(compatible; MSIE (\\d+)\\..*");
-
-    public static boolean blacklisted(String str) {
-        Integer version;
-
-        version = versionOf(str, MSIE);
-        return version != null && version < 7;
-    }
-
-    private static Integer versionOf(String str, Pattern client) {
-        String version;
-        Matcher matcher;
-
-        matcher = client.matcher(str);
-        if (matcher.matches()) {
-            version = matcher.group(1);
-            return new Integer(version);
-        } else {
-            return null;
-        }
+        return accepted != null && contains(accepted, "gzip");
     }
 
     // see http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html

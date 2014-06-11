@@ -104,13 +104,13 @@ public class Engine {
             return -1;
         }
         if (gzip) {
-            // see "High Performance Websites", by Steve Souders
+            // see http://cs193h.stevesouders.com and "High Performance Websites", by Steve Souders
             response.setHeader("Content-Encoding", "gzip");
-            response.addHeader("Cache-Control", "private");
             bytes = content.bytes;
         } else {
             bytes = unzip(content.bytes);
         }
+        response.addHeader("Vary", "Accept-Encoding");
         response.setBufferSize(0);
         response.setContentType(content.mimeType);
         response.setCharacterEncoding(ENCODING); // TODO: inspect header - does this have an effect?
