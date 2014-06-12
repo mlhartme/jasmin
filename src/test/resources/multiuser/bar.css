@@ -1,0 +1,86 @@
+#menu{
+  width: 180px;
+  position: absolute;
+  left: 0;
+  top: 110px;
+  color: #0A328C;
+  background-color: #eff1f4;
+}
+
+#menu a:link,
+#menu a:visited{
+  color: #0a328c;
+  text-decoration: none;
+}
+
+#menu a:active,
+#menu a:hover{
+  color: #000;
+  text-decoration: underline;
+}
+
+#menu h2{
+  padding: 8px 0 3px 18px;
+  background: #eff1f4 url(/modules/nxfix/img/layout/menu_header_line.gif) left bottom no-repeat;
+  color: #0a328c;
+  font-size: 12px;
+  margin: 0;
+}
+
+#menu #arrow{
+  float: left;
+  padding: 10px 5px 0 5px;
+}
+
+
+#menu h2 a:link,
+#menu h2 a:visited{
+  color: #0a328c;
+  text-decoration: none;
+}
+
+#menu h2 a:active,
+#menu h2 a:hover{
+  color: #000;
+  text-decoration: underline;
+}
+
+#menu ul{
+  list-style: none;
+  padding: 0;
+  /*background: #EFF1F4;*/
+  margin: 0;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#menu ul li{
+  font-weight: bold;
+  font-size: 12px;
+  padding: 1px 0px 1px 18px;
+}
+
+#menu ul ul{
+  list-style: none;
+}
+
+#menu ul ul li{
+  font-weight: normal;
+  font-size: 11px;
+}
+
+#menu ul li.current{
+  background: none;
+}
+
+#menu ul li.current a.current{
+  color: #000;
+  font-weight: bold;
+  background: none;
+  /*text-decoration: underline;*/
+  text-decoration: none;
+}
+
+#menu ul li.currentparent a.currentparent{
+  color: #232323;
+}
