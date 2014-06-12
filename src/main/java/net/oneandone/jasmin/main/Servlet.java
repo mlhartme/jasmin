@@ -159,8 +159,8 @@ public class Servlet extends HttpServlet {
             LOG.info("started engine, initial url=" + url);
             for (Module module : engine.repository.modules()) {
                 files = module.files();
-                if (files.size() > 1) {
-                    LOG.warn("deprecated: module '" + module.getName() + "' contains more than 1 file: " + files);
+                if (files.size() > 2) {
+                    LOG.warn("deprecated: module '" + module.getName() + "' contains more than 2 file: " + files);
                 }
                 for (File f : files) {
                     if (f.getNormal() instanceof WebdavNode) {
@@ -306,9 +306,6 @@ public class Servlet extends HttpServlet {
         boolean gzip;
         long date;
 
-        if ("/xml/jasmin".equals(request.getServletPath())) {
-            LOG.warn("deprecated servlet path '/xml/jasmin' - use '/jasmin' instead: " + path);
-        }
         idx = path.indexOf('/');
         if (idx == -1) {
             notFound(request, response);
