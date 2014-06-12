@@ -78,6 +78,11 @@
       <artifactId>ssass</artifactId>
       <version>1.0.6</version>
     </dependency>
+    <dependency><!-- TODO: dump when ssass is updated -->
+      <groupId>net.oneandone</groupId>
+      <artifactId>mork</artifactId>
+      <version>1.1.4-SNAPSHOT</version>
+    </dependency>
 
     <dependency>
       <groupId>com.google.javascript</groupId>

@@ -23,6 +23,8 @@ import java.io.IOException;
 import static org.junit.Assert.assertEquals;
 
 public class ConcurrentEngineTest {
+    private static final int FACTOR = 1;
+
     private static final World WORLD = new World();
 
     private static Repository repository() throws IOException {
@@ -42,14 +44,21 @@ public class ConcurrentEngineTest {
     }
 
     @Test
+    public void singlethreaded() throws Throwable {
+        Engine engine;
+
+        engine = new Engine(repository(), 1, 1000, 1000);
+        engine.request("css/foo");
+    }
+    @Test
     public void cachehits() throws Throwable {
         Engine engine;
 
-        engine = new Engine(repository(), 15, 100, 100);
-        parallel(engine, 2, 1000);
-        parallel(engine, 3, 997);
-        parallel(engine, 7, 997);
-        parallel(engine, 13, 997);
+        engine = new Engine(repository(), 15, 1000, 1000);
+        parallel(engine, 2, 1000 * FACTOR);
+        parallel(engine, 3, 997 * FACTOR);
+        parallel(engine, 7, 997 * FACTOR);
+        parallel(engine, 13, 997 * FACTOR);
     }
 
     @Test
@@ -57,10 +66,10 @@ public class ConcurrentEngineTest {
         Engine engine;
 
         engine = new Engine(repository(), 15, 0, 0);
-        parallel(engine, 2, 1000);
-        parallel(engine, 3, 997);
-        parallel(engine, 7, 997);
-        parallel(engine, 13, 997);
+        parallel(engine, 2, 1000 * FACTOR);
+        parallel(engine, 3, 997 * FACTOR);
+        parallel(engine, 7, 997 * FACTOR);
+        parallel(engine, 13, 997 * FACTOR);
     }
 
     @Test
@@ -68,10 +77,14 @@ public class ConcurrentEngineTest {
         Engine engine;
 
         engine = new Engine(repository(), 1, 0, 0);
-        parallel(engine, 2, 1000);
-        parallel(engine, 3, 997);
-        parallel(engine, 7, 997);
-        parallel(engine, 13, 997);
+        parallel(engine, 2, 1000 * FACTOR);
+        parallel(engine, 3, 997 * FACTOR);
+        parallel(engine, 7, 997 * FACTOR);
+        parallel(engine, 13, 997 * FACTOR);
+
+        // because the hashCache always misses first:
+        assertEquals(0, engine.contentCache.gets());
+        assertEquals(0, engine.contentCache.misses());
     }
 
     private void parallel(Engine engine, int threadCount, int repeat) throws Throwable {
