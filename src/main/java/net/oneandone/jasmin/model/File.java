@@ -25,6 +25,8 @@ public class File {
     private final Node minimized;
 
     private final MimeType type;
+
+    /** null if the file is in any variant */
     private final String variant;
 
     public File(Node normal, Node minimized, MimeType type, String variant) {

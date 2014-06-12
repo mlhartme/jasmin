@@ -43,8 +43,8 @@ public class Module {
             throw new IllegalArgumentException(name);
         }
         this.name = name;
-        this.files = new ArrayList<File>();
-        this.dependencies = new ArrayList<Module>();
+        this.files = new ArrayList<>();
+        this.dependencies = new ArrayList<>();
         this.source = source;
     }
 

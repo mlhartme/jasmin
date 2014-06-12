@@ -193,7 +193,7 @@ public class Engine {
                 if (gate == null) {
                     gate = new CountDownLatch(1);
                     if (pending.put(path, gate) != null) {
-                        throw new IllegalStateException();
+                        throw new IllegalStateException(path);
                     }
                     // we're the first thread to request this path -- compute it
                     break;

@@ -15,19 +15,37 @@
  */
 package net.oneandone.jasmin.model;
 
+import net.oneandone.sushi.fs.World;
 import org.junit.Test;
+
+import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
 public class ConcurrentEngineTest {
-    @Test
-    public void cachehits() throws Exception {
+    private static final World WORLD = new World();
+
+    private static Repository repository() throws IOException {
+        Module module;
         Repository repository;
-        Engine engine;
 
         repository = new Repository();
-        repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
-        engine = new Engine(repository, 15, 100, 100);
+
+        module = new Module("foo", new Source(null, "g", "foo", "1", "scm"));
+        module.files().add(new File(WORLD.resource("multiuser/foo.css"), null, MimeType.CSS, null));
+        repository.add(module);
+
+        module = new Module("bar", new Source(null, "g", "bar", "1", "scm"));
+        module.files().add(new File(WORLD.resource("multiuser/bar.css"), null, MimeType.CSS, null));
+        repository.add(module);
+        return repository;
+    }
+
+    @Test
+    public void cachehits() throws Throwable {
+        Engine engine;
+
+        engine = new Engine(repository(), 15, 100, 100);
         parallel(engine, 2, 1000);
         parallel(engine, 3, 997);
         parallel(engine, 7, 997);
@@ -35,13 +53,10 @@ public class ConcurrentEngineTest {
     }
 
     @Test
-    public void trashing() throws Exception {
-        Repository repository;
+    public void trashing() throws Throwable {
         Engine engine;
 
-        repository = new Repository();
-        repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
-        engine = new Engine(repository, 15, 0, 0);
+        engine = new Engine(repository(), 15, 0, 0);
         parallel(engine, 2, 1000);
         parallel(engine, 3, 997);
         parallel(engine, 7, 997);
@@ -49,25 +64,24 @@ public class ConcurrentEngineTest {
     }
 
     @Test
-    public void trashingWithOneProcessor() throws Exception {
-        Repository repository;
+    public void trashingWithOneProcessor() throws Throwable {
         Engine engine;
 
-        repository = new Repository();
-        repository.add(new Module("foo", new Source(null, "g", "a", "1", "scm")));
-        engine = new Engine(repository, 1, 0, 0);
+        engine = new Engine(repository(), 1, 0, 0);
         parallel(engine, 2, 1000);
         parallel(engine, 3, 997);
         parallel(engine, 7, 997);
         parallel(engine, 13, 997);
     }
 
-    private void parallel(Engine engine, int threadCount, int repeat) throws Exception {
+    private void parallel(Engine engine, int threadCount, int repeat) throws Throwable {
         ProcessThread[] threads;
+        int idx;
 
         threads = new ProcessThread[threadCount];
         for (int i = 0; i < threads.length; i++) {
-            threads[i] = new ProcessThread(engine, repeat);
+            idx  = i % engine.repository.modules().size();
+            threads[i] = new ProcessThread(engine, repeat, "css/" + engine.repository.modules().get(idx).getName());
             threads[i].start();
         }
         for (ProcessThread thread : threads) {
@@ -78,28 +92,39 @@ public class ConcurrentEngineTest {
 
     private static class ProcessThread extends Thread {
         private final Engine engine;
+        private final String path;
         private final int repeat;
-        private Exception exception;
+        private Throwable exception;
 
-        public ProcessThread(Engine engine, int repeat) {
+        public ProcessThread(Engine engine, int repeat, String path) {
             this.engine = engine;
+            this.path = path;
             this.repeat = repeat;
             this.exception = null;
         }
 
         @Override
         public void run() {
+            String expected;
+            String actual;
+
+            expected = null;
             for (int j = 0; j < repeat; j++) {
                 try {
-                    assertEquals("", engine.request("js/foo"));
-                } catch (Exception e) {
+                    actual = engine.request(path);
+                    if (expected == null) {
+                        expected = actual;
+                    } else {
+                        assertEquals(expected, actual);
+                    }
+                } catch (Throwable e) {
                     exception = e;
                     return;
                 }
             }
         }
 
-        public void finish() throws Exception {
+        public void finish() throws Throwable {
             join();
             if (exception != null) {
                 throw exception;
