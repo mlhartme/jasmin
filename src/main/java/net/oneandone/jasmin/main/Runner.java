@@ -22,7 +22,8 @@ import net.oneandone.jasmin.model.Resolver;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.fs.file.FileNode;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ import java.util.Random;
 
 public class Runner {
     public static final Random RANDOM = new Random();
-    public static final Logger LOG = Logger.getLogger(Runner.class);
+    public static final Logger LOG = LoggerFactory.getLogger(Runner.class);
 
     public static Runner create(String name, World world) throws IOException {
         FileNode base;

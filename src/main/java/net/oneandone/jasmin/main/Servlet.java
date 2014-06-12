@@ -26,9 +26,10 @@ import net.oneandone.sushi.fs.file.FileNode;
 import net.oneandone.sushi.fs.webdav.WebdavFilesystem;
 import net.oneandone.sushi.fs.webdav.WebdavNode;
 import net.oneandone.sushi.util.Strings;
-import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -51,7 +52,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Servlet extends HttpServlet {
-    public static final Logger LOG = Logger.getLogger(Servlet.class);
+    public static final Logger LOG = LoggerFactory.getLogger(Servlet.class);
 
     private static final String HOSTNAME = getHostname();
 

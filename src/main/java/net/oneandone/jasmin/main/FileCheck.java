@@ -24,13 +24,10 @@ import net.oneandone.jasmin.model.Resolver;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.fs.file.FileNode;
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PatternLayout;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,44 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 public class FileCheck {
-    private static final Logger LOG = Logger.getLogger(FileCheck.class);
-
-    public static void main(String[] args) throws IOException {
-        World world;
-        FileCheck check;
-
-        // usually called via wsd-app parent pom - without log4j config in place ...
-        ConsoleAppender ca = new ConsoleAppender();
-        ca.setWriter(new OutputStreamWriter(System.out));
-        ca.setLayout(new PatternLayout("%-5p [%t]: %m%n"));
-        Logger.getRootLogger().setLevel(Level.ERROR);
-        Logger.getRootLogger().addAppender(ca);
-
-        world = new World();
-        if (args.length > 0) {
-            world.setWorking(world.file(args[0]));
-        }
-        check = new FileCheck();
-        check.minimizeApplication(getWepappDir((FileNode) world.getWorking().join("target")));
-        System.out.println("file-check: " + check.size() + " files ...");
-        check = check.exceptions();
-        if (check.size() > 0) {
-            System.err.println("failed with "  + check.size() + " errors:");
-            System.err.println(check.toString());
-            System.exit(1);
-        } else {
-            System.out.println("ok");
-        }
-    }
-
-    private static FileNode getWepappDir(FileNode base) throws IOException {
-        for (FileNode dir : base.list()) {
-            if (dir.join("WEB-INF").isDirectory()) {
-                return dir;
-            }
-        }
-        throw new IOException("no webapp dir in " + base);
-    }
+    private static final Logger LOG = LoggerFactory.getLogger(FileCheck.class);
 
     private final Map<Node, List<Exception>> map;
 
@@ -90,7 +50,7 @@ public class FileCheck {
     public FileCheck exceptions() {
         Map<Node, List<Exception>> result;
 
-        result = new HashMap<Node, List<Exception>>();
+        result = new HashMap<>();
         for (Map.Entry<Node, List<Exception>> entry : map.entrySet()) {
             if (entry.getValue().size() > 0) {
                 result.put(entry.getKey(), entry.getValue());
