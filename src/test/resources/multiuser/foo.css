@@ -1,0 +1,40 @@
+/* jasmin */
+/* --------------------------------------------------- */
+/* GLOBAL BUTTON STYLES - as defined in the styleguide */
+/* --------------------------------------------------- */
+/* Notice: Many attributes are often repeated in several classes. */
+/* Please do not consolidate them by introducing common classes! */
+/* This will be made later on with the support of SASS. */
+/* outer span element is needed to set correct widths via grid styles */
+/* ---------------------------------------------------- */
+/* BUTTON STYLE A1 - yellow call-to-action button (big) */
+/* ---------------------------------------------------- */
+/* BUTTON TYPE A1 */
+/* default state */
+.button-a1 {
+  background-color: #0f95fc;
+  border-radius: 4px;
+  color: #fff;
+  display: inline-block;
+  font-family: OpenSansSemiBold, Arial, sans-serif;
+  font-size: 1em;
+  line-height: 1em;
+  padding: 14px 30px;
+  text-decoration: none;
+}
+
+/* needed for submit buttons */
+button.button-a1 {
+  border: 0 none; /* removes inner outlines in FF */
+}
+
+button.button-a1::-moz-focus-inner {
+  border: 0 none; /* removes inner outlines in FF */
+  padding: 0; /* corrects padding in FF */
+}
+
+/* hover state */
+.button-a1:hover {
+  background-color: #0e87e3;
+  cursor: pointer;
+}
