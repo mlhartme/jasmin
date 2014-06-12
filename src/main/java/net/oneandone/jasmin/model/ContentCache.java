@@ -29,7 +29,8 @@ public class ContentCache extends Cache<String, Content> {
     }
 
     @Override
-    public String valueToString(Content content) {
-        return content.bytes.length + " bytes";
+    protected void entryToString(String key, Content content, StringBuilder builder) {
+        builder.append(key).append(" -> [").append(content.bytes.length).append("]");
     }
+
 }

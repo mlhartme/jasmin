@@ -40,9 +40,7 @@ public class Item<T> {
 
     public static final SimpleDateFormat FORMATTER = new SimpleDateFormat("dd.MM.yy HH:mm:ss");
 
-    /** does *not* include the value. */
-    @Override
-    public String toString() {
+    public synchronized String stats() {
         return accessCount + " (" + FORMATTER.format(accessTime) + "), " + duration + " ms";
     }
 }

@@ -24,6 +24,16 @@ public class TestCache extends Cache<String, String> {
         super(maxSize);
     }
 
+    @Override
+    public int valueSize(String value) {
+        return value.length();
+    }
+
+    @Override
+    protected void entryToString(String key, String value, StringBuilder builder) {
+        builder.append(key).append(": ").append(value);
+    }
+
     public String compute(String key) {
         for (int i = 0; i < 100; i++) {
             // some busy wait ... no-op:
@@ -44,10 +54,5 @@ public class TestCache extends Cache<String, String> {
         value = compute(key);
         add(key, value, started, System.currentTimeMillis() - started);
         return value;
-    }
-
-    @Override
-    public int valueSize(String value) {
-        return value.length();
     }
 }

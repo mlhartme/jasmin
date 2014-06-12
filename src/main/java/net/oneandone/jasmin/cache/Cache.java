@@ -21,8 +21,8 @@ import java.util.Map;
 
 
 public abstract class Cache<K, V> {
-    private final LinkedHashMap<K, Item<V>> items;
-    private final int maxSize;
+    protected final LinkedHashMap<K, Item<V>> items;
+    protected final int maxSize;
 
     /** cumulated valueSize of all items. */
     private int size;
@@ -46,9 +46,6 @@ public abstract class Cache<K, V> {
     //--
 
     public abstract int valueSize(V value);
-    public String valueToString(V value) {
-        return value.toString();
-    }
 
     //--
 
@@ -167,6 +164,7 @@ public abstract class Cache<K, V> {
         StringBuilder builder;
         int percent;
         int count;
+        Item<V> item;
 
         builder = new StringBuilder();
         builder.append("size: ").append(maxSize).append(" (").append(maxSize == 0 ? 100 : (size * 100 / maxSize)).append("% used)\n");
@@ -178,12 +176,12 @@ public abstract class Cache<K, V> {
         }
         builder.append("lookups: ").append(count).append(" (").append(percent).append("% hits)\n");
         for (Map.Entry<K, Item<V>> entry : items.entrySet()) {
-            builder.append(entry.getKey().toString()).append(": ").append(toString(entry.getValue())).append("\n");
+            item = entry.getValue();
+            entryToString(entry.getKey(), item.value, builder);
+            builder.append(" - ").append(item.stats()).append("\n");
         }
         return builder.toString();
     }
 
-    private String toString(Item<V> item) {
-        return item.toString() + ": " + valueToString(item.value);
-    }
+    protected abstract void entryToString(K key, V value, StringBuilder builder);
 }

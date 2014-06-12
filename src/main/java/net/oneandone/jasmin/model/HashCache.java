@@ -27,4 +27,10 @@ public class HashCache extends Cache<String, String> {
     public int valueSize(String hash) {
         return hash.length();
     }
+
+    @Override
+    protected void entryToString(String key, String value, StringBuilder builder) {
+        builder.append(value).append(" <- ").append(key);
+    }
+
 }
