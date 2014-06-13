@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
-    <release date="2014-06-11" version="3.0.6">
+    <release date="2014-06-13" version="3.0.6">
       <action date="2014-06-12" dev="mhm" type="fix">
         Fixed deprecated warning for modules with both an js and a css file.
       </action>
