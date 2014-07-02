@@ -3,6 +3,9 @@
   <body>
     <release date="2014-06-13" version="3.0.6">
       <action date="2014-06-12" dev="mhm" type="fix">
+        Fixed multi-threading problem in css parsing by updating to mork 1.1.4.
+      </action>
+      <action date="2014-06-12" dev="mhm" type="fix">
         Fixed deprecated warning for modules with both an js and a css file.
       </action>
       <action date="2014-06-12" dev="mhm" type="remove">
