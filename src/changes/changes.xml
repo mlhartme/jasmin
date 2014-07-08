@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
+    <release date="2014-08-07" version="3.0.7">
+      <action date="2014-08-07" dev="mhm" type="fix">
+        Fixed jasmin comment parsing for files with BOM.
+      </action>
+    </release>
     <release date="2014-06-13" version="3.0.6">
       <action date="2014-06-12" dev="mhm" type="fix">
         Fixed multi-threading problem in css parsing by updating to mork 1.1.4.

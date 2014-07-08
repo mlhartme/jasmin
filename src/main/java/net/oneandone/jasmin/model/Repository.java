@@ -377,11 +377,11 @@ public class Repository {
                 try {
                     depends = notLinked.get(module);
                     if (depends == null) {
-                        depends = new ArrayList<String>();
+                        depends = new ArrayList<>();
                         notLinked.put(module, depends);
                     }
-                    calls = new ArrayList<String>();
-                    Parser.parseComment(file.getNormal().readString(), depends, calls);
+                    calls = new ArrayList<>();
+                    Parser.parseComment(stripBom(file.getNormal().readString()), depends, calls);
                 } catch (IOException e) {
                     throw new IOException(normal.node.getURI() + ": " + e.getMessage(), e);
                 }
@@ -404,6 +404,15 @@ public class Repository {
                 module.files().add(file);
                 addReload(file);
             }
+        }
+    }
+
+    // http://en.wikipedia.org/wiki/Byte_Order_Mark
+    private static String stripBom(String str) {
+        if (!str.isEmpty() && str.charAt(0) == 65279) {
+            return str.substring(1);
+        } else {
+            return str;
         }
     }
 

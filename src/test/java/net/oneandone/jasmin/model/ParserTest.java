@@ -39,8 +39,8 @@ public class ParserTest {
         List<String> depends;
         List<String> webservices;
 
-        depends = new ArrayList<String>();
-        webservices = new ArrayList<String>();
+        depends = new ArrayList<>();
+        webservices = new ArrayList<>();
         try {
             Parser.parseComment(str, depends, webservices);
         } catch (IOException e) {
