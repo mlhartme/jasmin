@@ -54,7 +54,7 @@ public final class Parser {
         int idx;
         List<String[]> result;
 
-        result = new ArrayList<String[]>();
+        result = new ArrayList<>();
         for (String line : NL.split(str)) {
             idx = line.indexOf('=');
             if (idx == -1) {
