@@ -43,7 +43,7 @@ public class ReferencesTest {
             fail();
         } catch (IOException e) {
             assertTrue(e.getMessage().contains("1:"));
-            assertTrue(e.getMessage().contains("unterminated string literal"));
+            assertTrue(e.getMessage(), e.getMessage().toLowerCase().contains("unterminated string literal"));
         }
     }
 
