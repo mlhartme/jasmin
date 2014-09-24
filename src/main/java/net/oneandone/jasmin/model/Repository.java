@@ -257,7 +257,6 @@ public class Repository {
 
         // pws removes WEB-INF classes and uses target/classes instead ...
         properties = docroot.getParent().join("classes", PROJECT_PROPERTIES);
-        System.out.println("check:" + properties + " " + properties.isFile()    );
         if (!properties.isFile()) {
             properties = docroot.join("WEB-INF/classes", PROJECT_PROPERTIES);
         }
