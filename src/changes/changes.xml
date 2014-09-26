@@ -14,6 +14,8 @@
     <release date="2014-08-07" version="3.0.8">
       <action date="2014-08-07" dev="mhm" type="fix">
         Update closure compiler rr2079.1 to v20140625.
+        CAUTION: you have to make sure that your application used guava 1.17 or newer.
+        This change should have been a minor version change, but I realized it too late :(
       </action>
     </release>
     <release date="2014-08-07" version="3.0.7">
