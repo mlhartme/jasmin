@@ -91,7 +91,7 @@ public class ReferencesTest {
         try (Writer writer = dest.createWriter()) {
             references = new References(type, true);
             for (String source : sources) {
-                references.add(true, world.memoryNode(source));
+                references.add(true, false, world.memoryNode(source));
             }
             references.writeTo(writer);
         }

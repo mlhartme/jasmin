@@ -56,24 +56,27 @@ public class References {
         References result;
 
         result = new References(type, minimize);
-        result.add(minimize, node);
+        result.add(minimize, false, node);
         return result;
     }
 
     public final MimeType type;
     public final boolean overallMinimize;
     public final List<Boolean> minimizes;
+    public final List<Boolean> declarationsOnly;
     public final List<Node> nodes;
 
     public References(MimeType type, boolean overallMinimize) {
         this.type = type;
         this.overallMinimize = overallMinimize;
         this.minimizes = new ArrayList<>();
+        this.declarationsOnly = new ArrayList<>();
         this.nodes = new ArrayList<>();
     }
 
-    public void add(boolean minimize, Node node) {
+    public void add(boolean minimize, boolean declrationOnly, Node node) {
         minimizes.add(minimize);
+        declarationsOnly.add(declrationOnly);
         nodes.add(node);
     }
 
@@ -163,6 +166,9 @@ public class References {
         Mapper mapper;
         Node node;
 
+        if (output.getMuted()) {
+            throw new IllegalArgumentException();
+        }
         mapper = SSASS.newInstance();
         mapper.setErrorHandler(new ExceptionErrorHandler());
         for (int i = 0; i < nodes.size(); i++) {
@@ -177,10 +183,14 @@ public class References {
             if (results == null) {
                 throw new IOException(node.toString() + ": css/sass error");
             }
+            output.setMuted(declarationsOnly.get(i));
             try {
                 ((Stylesheet) results[0]).toCss(output);
             } catch (GenericException e) {
                 throw new IOException(node.toString() + ": css generation failed: " + e.getMessage(), e);
+            }
+            if (output.getMuted() != declarationsOnly.get(i)) {
+                throw new IllegalStateException();
             }
         }
     }

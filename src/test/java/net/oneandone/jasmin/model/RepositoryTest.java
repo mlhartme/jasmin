@@ -114,13 +114,6 @@ public class RepositoryTest {
         check("sub.bar+foo/css/x", "my.css");
     }
 
-    @Test
-    public void resolveNot() throws Exception {
-        check("foo+!foo/css/x");
-        check("foo+!sub.bar/css/x", "my.css");
-        check("sub.bar+!foo/css/x");
-    }
-
     @Test(expected = CyclicDependency.class)
     public void resolveDuplicate() throws Exception {
         check("foo+foo/css/x", "my.css");

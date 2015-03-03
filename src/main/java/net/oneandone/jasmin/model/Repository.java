@@ -180,6 +180,7 @@ public class Repository {
         List<Module> moduleList;
         Node resolved;
         boolean minimize;
+        boolean declarationOnly;
 
         includes = new ArrayList<>();
         excludes = new ArrayList<>();
@@ -194,13 +195,21 @@ public class Repository {
             }
         }
         moduleList = sequence(includes);
-        moduleList.removeAll(sequence(excludes));
+        excludes = sequence(excludes);
         references = new References(request.type, request.minimize);
         for (Module module : moduleList) {
+            if (excludes.contains(module)) {
+                if (request.type == MimeType.JS) {
+                    continue;
+                }
+                declarationOnly = true;
+            } else {
+                declarationOnly = false;
+            }
             for (File file : module.resolve(request)) {
                 resolved = file.get(request.minimize);
                 minimize = request.minimize && file.getMinimized() == null;
-                references.add(minimize, resolved);
+                references.add(minimize, declarationOnly, resolved);
             }
         }
         return references;
