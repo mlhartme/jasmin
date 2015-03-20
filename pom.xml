@@ -76,7 +76,7 @@
     <dependency>
       <groupId>net.oneandone</groupId>
       <artifactId>ssass</artifactId>
-      <version>1.0.9-SNAPSHOT</version>
+      <version>1.0.9</version>
     </dependency>
     <dependency><!-- TODO: dump when ssass is updated -->
       <groupId>net.oneandone</groupId>
