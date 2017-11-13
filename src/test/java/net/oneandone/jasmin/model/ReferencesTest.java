@@ -1,12 +1,12 @@
 /**
  * Copyright 1&1 Internet AG, https://github.com/1and1/
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,7 @@ package net.oneandone.jasmin.model;
 
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -29,7 +30,12 @@ import static org.junit.Assert.fail;
 public class ReferencesTest {
     private static final String UMLAUTE = "\"\u00f6\u00d6\u00fc\";"; // öÖü
 
-    private World world = new World();
+    private World world;
+
+    @Before
+    public void world() throws IOException {
+        world = World.create();
+    }
 
     @Test
     public void jsNormal() throws Exception {
@@ -75,20 +81,20 @@ public class ReferencesTest {
 
     //--
 
-    private String js(String ... sources) throws IOException {
+    private String js(String... sources) throws IOException {
         return minimize(MimeType.JS, sources);
     }
 
-    private String css(String ... sources) throws IOException {
+    private String css(String... sources) throws IOException {
         return minimize(MimeType.CSS, sources);
     }
 
-    private String minimize(MimeType type, String ... sources) throws IOException {
+    private String minimize(MimeType type, String... sources) throws IOException {
         Node dest;
         References references;
 
         dest = world.memoryNode();
-        try (Writer writer = dest.createWriter()) {
+        try (Writer writer = dest.newWriter()) {
             references = new References(type, true);
             for (String source : sources) {
                 references.add(true, false, world.memoryNode(source));

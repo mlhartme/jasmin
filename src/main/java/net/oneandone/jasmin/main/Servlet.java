@@ -23,8 +23,8 @@ import net.oneandone.jasmin.model.Source;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.fs.file.FileNode;
-import net.oneandone.sushi.fs.webdav.WebdavFilesystem;
-import net.oneandone.sushi.fs.webdav.WebdavNode;
+import net.oneandone.sushi.fs.http.HttpFilesystem;
+import net.oneandone.sushi.fs.http.HttpNode;
 import net.oneandone.sushi.util.Strings;
 import org.json.JSONException;
 import org.json.JSONWriter;
@@ -88,7 +88,7 @@ public class Servlet extends HttpServlet {
         String str;
 
         try {
-            world = new World();
+            world = World.create();
             configure(world, "http");
             configure(world, "https");
             str = config.getInitParameter("docroot");
@@ -112,9 +112,9 @@ public class Servlet extends HttpServlet {
     private static final int HTTP_TIMEOUT = 10 * 1000;
 
     private static void configure(World world, String scheme) {
-        WebdavFilesystem webdav;
+        HttpFilesystem webdav;
 
-        webdav = world.getFilesystem(scheme, WebdavFilesystem.class);
+        webdav = world.getFilesystem(scheme, HttpFilesystem.class);
         webdav.setDefaultConnectionTimeout(HTTP_TIMEOUT);
         webdav.setDefaultReadTimeout(HTTP_TIMEOUT);
     }
@@ -138,7 +138,7 @@ public class Servlet extends HttpServlet {
                     now = System.currentTimeMillis();
                     if (lastModified > now) {
                         // fail to avoid repeated re-init
-                        throw new IOException(node.getURI() + " has lastModifiedDate in the future: "
+                        throw new IOException(node.getUri() + " has lastModifiedDate in the future: "
                                 + new Date(lastModified) + "(now: " + new Date(now) + ")");
                     }
                     LOG.info("reloading jasmin for application '" + application.getContextPath() + "' - changed file: " + node);
@@ -163,8 +163,8 @@ public class Servlet extends HttpServlet {
                     LOG.warn("deprecated: module '" + module.getName() + "' contains more than 2 file: " + files);
                 }
                 for (File f : files) {
-                    if (f.getNormal() instanceof WebdavNode) {
-                        LOG.warn("deprecated: module '" + module.getName() + "' uses base LOCALHOST: " + f.getNormal().getURI());
+                    if (f.getNormal() instanceof HttpNode) {
+                        LOG.warn("deprecated: module '" + module.getName() + "' uses base LOCALHOST: " + f.getNormal().getUri());
                     }
                 }
             }
@@ -176,7 +176,7 @@ public class Servlet extends HttpServlet {
                 }
                 LOG.info("reload if one of these " + reloadFiles.size() + " files is modified: ");
                 for (Node node : reloadFiles) {
-                    LOG.info("  " + node.getURI());
+                    LOG.info("  " + node.getUri());
                 }
                 loaded = System.currentTimeMillis();
             }
@@ -494,10 +494,10 @@ public class Servlet extends HttpServlet {
                 dest.key("type");
                 dest.value(file.getType());
                 dest.key("normal");
-                dest.value(file.getNormal().getURI());
+                dest.value(file.getNormal().getUri());
                 if (file.getMinimized() != null) {
                     dest.key("minimized");
-                    dest.value(file.getMinimized().getURI());
+                    dest.value(file.getMinimized().getUri());
                 }
                 dest.key("variant");
                 dest.value(file.getVariant());
@@ -532,7 +532,7 @@ public class Servlet extends HttpServlet {
 
         lines = new String[reloadFiles.size()];
         for (int i = 0; i < lines.length; i++) {
-            lines[i] = reloadFiles.get(i).getURI().toString();
+            lines[i] = reloadFiles.get(i).getUri().toString();
         }
         text(response, lines);
     }

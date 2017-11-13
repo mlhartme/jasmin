@@ -18,7 +18,6 @@ package net.oneandone.jasmin.model;
 import com.google.javascript.jscomp.BasicErrorManager;
 import com.google.javascript.jscomp.CheckLevel;
 import com.google.javascript.jscomp.Compiler;
-
 import com.google.javascript.jscomp.CompilerOptions;
 import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.Result;
@@ -29,11 +28,10 @@ import net.oneandone.mork.mapping.Mapper;
 import net.oneandone.mork.misc.GenericException;
 import net.oneandone.ssass.scss.Output;
 import net.oneandone.ssass.scss.Stylesheet;
-import net.oneandone.sushi.fs.CreateInputStreamException;
 import net.oneandone.sushi.fs.GetLastModifiedException;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
-import net.oneandone.sushi.fs.webdav.WebdavNode;
+import net.oneandone.sushi.fs.http.HttpNode;
 import net.oneandone.sushi.fs.zip.ZipNode;
 
 import java.io.IOException;
@@ -143,8 +141,8 @@ public class References {
     private static String readString(Node node) throws IOException {
         try {
             return node.readString();
-        } catch (CreateInputStreamException e) {
-            if ((e.getCause() instanceof org.apache.http.NoHttpResponseException) && (node instanceof WebdavNode)) {
+        } catch (IOException e) {
+            if (node instanceof HttpNode) {
                 try {
                     return node.readString();
                 } catch (IOException e2) {
@@ -213,10 +211,10 @@ public class References {
 
         result = Long.MIN_VALUE;
         for (Node node : nodes) {
-            if (node instanceof WebdavNode) {
+            if (node instanceof HttpNode) {
                 // skip getLastModified - it's not supported by Webservice Stub Servlet
             } else {
-                result = Math.max(result , node.getLastModified());
+                result = Math.max(result, node.getLastModified());
             }
         }
         return result == Long.MIN_VALUE ? -1 : result;
@@ -246,7 +244,7 @@ public class References {
 
         builder = new StringBuilder();
         for (int i = 0; i < nodes.size(); i++) {
-            builder.append(nodes.get(i).getURI());
+            builder.append(nodes.get(i).getUri());
             builder.append(minimizes.get(i) ? "(min) " : " ");
         }
         return builder.toString();
@@ -268,8 +266,8 @@ public class References {
             return "zip:" + name + "/" + node.getPath();
         } else if (node instanceof FileNode) {
             return "file:" + node.getRelative(node.getWorld().getWorking());
-        } else if (node instanceof WebdavNode) {
-            return "http:" + node.getName() + ((WebdavNode) node).getQuery();
+        } else if (node instanceof HttpNode) {
+            return "http:" + node.getName() + ((HttpNode) node).getQuery();
         } else {
             return node.getName();
         }

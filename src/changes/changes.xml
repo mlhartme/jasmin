@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document xmlns="http://maven.apache.org/changes/1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/changes/1.0.0 http://maven.apache.org/xsd/changes-1.0.0.xsd">
   <body>
+    <release date="" version="3.0.13">
+      <action date="2017-11-13" dev="akurth" type="update">
+        sushi 3.1.6 with code adaptions
+      </action>
+      <action date="2017-11-13" dev="akurth" type="update">
+        ssass 1.0.10, slf4j 1.7.25, pustefix 0.22.0, servlet-api 3.1.0
+      </action>
+    </release>
     <release date="2014-03-20" version="3.0.12">
       <action date="2014-03-03" dev="mhm" type="fix">
         Reference exclusions must not exclude declarations.

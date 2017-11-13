@@ -29,6 +29,8 @@
     <pmd.skip>true</pmd.skip>
     <cpd.skip>true</cpd.skip>
     <findbugs.skip>true</findbugs.skip>
+
+    <version.slf4j>1.7.25</version.slf4j>
   </properties>
 
   <developers>
@@ -56,12 +58,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.7</version>
+      <version>${version.slf4j}</version>
     </dependency>
     <dependency>
       <groupId>net.oneandone</groupId>
       <artifactId>sushi</artifactId>
-      <version>2.8.14</version>
+      <version>3.1.6</version>
     </dependency>
     <dependency>
       <groupId>net.oneandone</groupId>
@@ -69,19 +71,14 @@
       <version>1.0.0</version>
     </dependency>
     <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpcore</artifactId>
-      <version>4.2.2</version>
+      <groupId>net.oneandone</groupId>
+      <artifactId>metadata</artifactId>
+      <version>1.0.0</version>
     </dependency>
     <dependency>
       <groupId>net.oneandone</groupId>
       <artifactId>ssass</artifactId>
-      <version>1.0.9</version>
-    </dependency>
-    <dependency><!-- TODO: dump when ssass is updated -->
-      <groupId>net.oneandone</groupId>
-      <artifactId>mork</artifactId>
-      <version>1.1.4</version>
+      <version>1.0.10</version>
     </dependency>
 
     <dependency>
@@ -93,7 +90,7 @@
     <dependency>
       <groupId>org.pustefixframework</groupId>
       <artifactId>pustefix-live</artifactId>
-      <version>0.18.30</version>
+      <version>0.22.0</version>
     </dependency>
 
     <dependency>
@@ -104,8 +101,8 @@
 
     <dependency>
       <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.1.0</version>
       <scope>provided</scope>
     </dependency>
 
@@ -117,7 +114,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.5</version>
+      <version>${version.slf4j}</version>
       <scope>test</scope>
     </dependency>
 

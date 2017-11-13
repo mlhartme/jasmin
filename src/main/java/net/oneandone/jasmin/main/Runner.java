@@ -64,7 +64,7 @@ public class Runner {
         return paths.size();
     }
 
-    public Runner add(Node log, String application, int max) throws IOException {
+    public Runner add(Node<?> log, String application, int max) throws IOException {
         for (String line : log.readLines()) {
             line = line.trim();
             line = line.substring(line.indexOf('|') + 1);

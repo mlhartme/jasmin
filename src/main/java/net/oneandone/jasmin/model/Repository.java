@@ -15,17 +15,17 @@
  */
 package net.oneandone.jasmin.model;
 
+import net.oneandone.graph.CyclicDependency;
+import net.oneandone.graph.Graph;
 import net.oneandone.jasmin.descriptor.Base;
 import net.oneandone.jasmin.descriptor.Library;
 import net.oneandone.jasmin.descriptor.Resource;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.file.FileNode;
 import net.oneandone.sushi.fs.filter.Filter;
+import net.oneandone.sushi.fs.http.HttpNode;
 import net.oneandone.sushi.fs.memory.MemoryNode;
-import net.oneandone.sushi.fs.webdav.WebdavNode;
 import net.oneandone.sushi.fs.zip.ZipNode;
-import net.oneandone.graph.CyclicDependency;
-import net.oneandone.graph.Graph;
 import net.oneandone.sushi.util.Strings;
 import net.oneandone.sushi.util.Util;
 
@@ -305,7 +305,7 @@ public class Repository {
     }
 
     private void addReload(Node node) {
-        if (node instanceof WebdavNode) {
+        if (node instanceof HttpNode) {
             return;
         }
         if (node instanceof FileNode) {
@@ -391,19 +391,19 @@ public class Repository {
                     calls = new ArrayList<>();
                     Parser.parseComment(stripBom(file.getNormal().readString()), depends, calls);
                 } catch (IOException e) {
-                    throw new IOException(normal.node.getURI() + ": " + e.getMessage(), e);
+                    throw new IOException(normal.node.getUri() + ": " + e.getMessage(), e);
                 }
                 if (calls.size() > 0) {
                     if (file.getMinimized() != null) {
-                        throw new UnsupportedOperationException(file.getNormal().getURI().toString());
+                        throw new UnsupportedOperationException(file.getNormal().getUri().toString());
                     }
                     Node tmp = resolver.getWorld().memoryNode();
-                    try (OutputStream dest = tmp.createOutputStream()) {
+                    try (OutputStream dest = tmp.newOutputStream()) {
                         for (String webservice : calls) {
                             Call.call(attributes, webservice, dest);
                             dest.write('\n');
                         }
-                        try (InputStream orig = file.getNormal().createInputStream()) {
+                        try (InputStream orig = file.getNormal().newInputStream()) {
                             resolver.getWorld().getBuffer().copy(orig, dest);
                         }
                     }
@@ -483,7 +483,7 @@ public class Repository {
         public final String variant;
         public final boolean minimized;
 
-        public Ref(Node node, String path, String module, String variant, boolean minimized) {
+        Ref(Node node, String path, String module, String variant, boolean minimized) {
             this.node = node;
             this.path = path;
             this.module = module;
