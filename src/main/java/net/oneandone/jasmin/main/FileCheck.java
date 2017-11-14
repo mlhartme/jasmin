@@ -65,7 +65,7 @@ public class FileCheck {
 
         result = new StringBuilder();
         for (Map.Entry<Node, List<Exception>> entry : map.entrySet()) {
-            result.append(entry.getKey().getURI()).append('\n');
+            result.append(entry.getKey().getUri()).append('\n');
             for (Exception e : entry.getValue()) {
                 result.append("  ").append(e.getMessage()).append('\n');
             }
@@ -89,7 +89,7 @@ public class FileCheck {
         World world;
         Resolver resolver;
 
-        world = new World();
+        world = World.create();
         resolver = new Resolver(world);
         minimize(false, Repository.load(resolver), world);
     }
@@ -100,7 +100,7 @@ public class FileCheck {
         Node descriptor;
         Resolver resolver;
 
-        world = new World();
+        world = World.create();
         resolver = new Resolver(world);
         resolver.add(Base.DOCROOT, application);
         resolver.add(Base.LOCALHOST, world.validNode("http://nosuchhost"));
@@ -132,7 +132,7 @@ public class FileCheck {
                         dest = world.getTemp().createTempFile();
                         LOG.info("fileCheck module=" + module.getName() + ", file=" + src);
                         started = System.currentTimeMillis();
-                        try (Writer writer = dest.createWriter()) {
+                        try (Writer writer = dest.newWriter()) {
                             References.create(file.getType(), true, src).writeTo(writer);
                         }
                         LOG.info("done, " + (System.currentTimeMillis() - started) + " ms");

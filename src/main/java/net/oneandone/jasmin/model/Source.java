@@ -31,7 +31,7 @@ public class Source {
         String scm;
 
         properties.checkExists();
-        try (Reader src = properties.createReader()) {
+        try (Reader src = properties.newReader()) {
             p = new Properties();
             p.load(src);
         }
@@ -53,14 +53,14 @@ public class Source {
     }
 
     /** root node searched for files. */
-    public final Node classpathBase;
+    public final Node<?> classpathBase;
 
     public final String groupId;
     public final String artifactId;
     public final String version;
     public final String scm;
 
-    public Source(Node classpathBase, String groupId, String artifactId, String version, String scm) {
+    public Source(Node<?> classpathBase, String groupId, String artifactId, String version, String scm) {
         this.classpathBase = classpathBase;
         this.groupId = groupId;
         this.artifactId = artifactId;

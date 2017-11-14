@@ -31,6 +31,7 @@ import java.util.List;
 
 /** Application configuration, factory for engines. */
 public class Application {
+
     public static Application load(World world, ServletConfig config, FileNode docroot) throws Exception {
         String str;
         Node applicationDescriptor;

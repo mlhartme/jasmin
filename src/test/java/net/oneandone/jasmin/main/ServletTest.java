@@ -23,8 +23,6 @@ import java.io.IOException;
 import java.io.Reader;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class ServletTest {
     @Test
@@ -63,10 +61,10 @@ public class ServletTest {
         int c;
         int count;
 
-        world = new World();
+        world = World.create();
         node = world.node("http://dsl.1und1.de/xml/jasmin/get/111004-1208/prefix+dslorder-de+opener-detection+qx-clickmap+"
                 + "qx-backbutton+econda-tracking+nedstat-tracking+adition-retargeting/js-min/AC:O:def");
-        try (Reader reader = node.createReader()) {
+        try (Reader reader = node.newReader()) {
             count = 0;
             Thread.sleep(10000);
             while ((c = reader.read()) != -1) {

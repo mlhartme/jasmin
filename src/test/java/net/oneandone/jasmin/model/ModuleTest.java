@@ -26,7 +26,7 @@ public class ModuleTest {
         Repository repository;
         Module group;
 
-        repository = Repository.load(new Resolver(new World()));
+        repository = Repository.load(new Resolver(World.create()));
         group = repository.get("variant.tree");
         assertEquals("lead", group.getBest(MimeType.JS, "bar"));
         assertEquals("foo", group.getBest(MimeType.JS, "foo"));

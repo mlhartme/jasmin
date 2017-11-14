@@ -35,7 +35,7 @@ public class RepositoryTest {
 
     @Before
     public void before() throws IOException {
-        world = new World();
+        world = World.create();
         repository = Repository.load(new Resolver(world));
     }
 

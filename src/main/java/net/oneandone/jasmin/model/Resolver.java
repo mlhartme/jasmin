@@ -20,8 +20,8 @@ import net.oneandone.jasmin.descriptor.Resource;
 import net.oneandone.sushi.fs.Node;
 import net.oneandone.sushi.fs.World;
 import net.oneandone.sushi.fs.file.FileNode;
-import net.oneandone.sushi.fs.webdav.WebdavNode;
-import net.oneandone.sushi.fs.webdav.WebdavRoot;
+import net.oneandone.sushi.fs.http.HttpNode;
+import net.oneandone.sushi.fs.http.HttpRoot;
 import net.oneandone.sushi.fs.zip.ZipNode;
 import org.pustefixframework.live.LiveResolver;
 
@@ -115,7 +115,7 @@ public class Resolver {
     private Node doResolve(Node root, String path) throws Exception {
         java.io.File file;
         FileNode resolvedRoot;
-        WebdavRoot webdavRoot;
+        HttpRoot webdavRoot;
         int idx;
         String pathPart;
         String queryPart;
@@ -124,8 +124,8 @@ public class Resolver {
         if (path.startsWith("/")) {
             throw new IllegalArgumentException(path);
         }
-        if (root instanceof WebdavNode) {
-            webdavRoot = ((WebdavNode) root).getRoot();
+        if (root instanceof HttpNode) {
+            webdavRoot = ((HttpNode) root).getRoot();
             idx = path.indexOf('?');
             if (idx == -1) {
                 pathPart = path;

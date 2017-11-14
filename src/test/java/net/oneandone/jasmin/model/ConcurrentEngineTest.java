@@ -1,12 +1,12 @@
 /**
  * Copyright 1&1 Internet AG, https://github.com/1and1/
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,7 +25,15 @@ import static org.junit.Assert.assertEquals;
 public class ConcurrentEngineTest {
     private static final int FACTOR = 1;
 
-    private static final World WORLD = new World();
+    private static final World WORLD;
+
+    static {
+        try {
+            WORLD = World.create();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     private static Repository repository() throws IOException {
         Module module;
@@ -50,6 +58,7 @@ public class ConcurrentEngineTest {
         engine = new Engine(repository(), 1, 1000, 1000);
         engine.request("css/foo");
     }
+
     @Test
     public void cachehits() throws Throwable {
         Engine engine;
@@ -93,7 +102,7 @@ public class ConcurrentEngineTest {
 
         threads = new ProcessThread[threadCount];
         for (int i = 0; i < threads.length; i++) {
-            idx  = i % engine.repository.modules().size();
+            idx = i % engine.repository.modules().size();
             threads[i] = new ProcessThread(engine, repeat, "css/" + engine.repository.modules().get(idx).getName());
             threads[i].start();
         }
@@ -109,7 +118,7 @@ public class ConcurrentEngineTest {
         private final int repeat;
         private Throwable exception;
 
-        public ProcessThread(Engine engine, int repeat, String path) {
+        ProcessThread(Engine engine, int repeat, String path) {
             this.engine = engine;
             this.path = path;
             this.repeat = repeat;
